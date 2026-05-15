@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Redis">
+  <rect width="64" height="64" rx="18" fill="#3B0A08"/>
+  <path fill="#DC382D" d="m32 12 24 10-24 10L8 22l24-10Zm0 17 24 10-24 10L8 39l24-10Zm0 10 24 10-24 10L8 49l24-10Z"/>
+  <path fill="#fff" d="m32 17 9 4-9 4-9-4 9-4Z" opacity=".9"/>
+</svg>
