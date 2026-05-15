@@ -1,6 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Python">
-  <rect width="64" height="64" rx="18" fill="#111827"/>
-  <path fill="#3776AB" d="M32 10c-9 0-12 3.2-12 8v6h13v3H15c-4.6 0-8 3.8-8 10s3.4 10 8 10h5v-7c0-5 4-9 9-9h14c4.4 0 8-3.6 8-8v-5c0-4.8-4-8-19-8Z"/>
-  <path fill="#FFD43B" d="M32 54c9 0 12-3.2 12-8v-6H31v-3h18c4.6 0 8-3.8 8-10s-3.4-10-8-10h-5v7c0 5-4 9-9 9H21c-4.4 0-8 3.6-8 8v5c0 4.8 4 8 19 8Z"/>
-  <circle cx="26" cy="18" r="2.3" fill="#fff"/><circle cx="38" cy="46" r="2.3" fill="#111827"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" aria-label="Python" viewBox="0 0 64 64"><rect width="64" height="64" fill="#111827" rx="18"/><path fill="#3776ab" d="M32 10c-9 0-12 3.2-12 8v6h13v3H15c-4.6 0-8 3.8-8 10s3.4 10 8 10h5v-7c0-5 4-9 9-9h14c4.4 0 8-3.6 8-8v-5c0-4.8-4-8-19-8"/><path fill="#ffd43b" d="M32 54c9 0 12-3.2 12-8v-6H31v-3h18c4.6 0 8-3.8 8-10s-3.4-10-8-10h-5v7c0 5-4 9-9 9H21c-4.4 0-8 3.6-8 8v5c0 4.8 4 8 19 8"/><circle cx="26" cy="18" r="2.3" fill="#fff"/><circle cx="38" cy="46" r="2.3" fill="#111827"/></svg>

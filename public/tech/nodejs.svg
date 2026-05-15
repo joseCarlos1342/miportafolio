@@ -1,5 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Node.js">
-  <rect width="64" height="64" rx="18" fill="#0F1F12"/>
-  <path fill="#5FA04E" d="M32 8 53 20v24L32 56 11 44V20L32 8Z"/>
-  <path fill="#fff" d="M22 43V24h5.2l9.8 12.4V24h5v19h-5.1L27 30.6V43h-5Z"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" aria-label="Node.js" viewBox="0 0 64 64"><rect width="64" height="64" fill="#0f1f12" rx="18"/><path fill="#5fa04e" d="m32 8 21 12v24L32 56 11 44V20z"/><path fill="#fff" d="M22 43V24h5.2L37 36.4V24h5v19h-5.1L27 30.6V43z"/></svg>

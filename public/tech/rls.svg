@@ -1,5 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Row Level Security">
-  <rect width="64" height="64" rx="18" fill="#052E2B"/>
-  <path fill="#3ECF8E" d="M14 14h36v36H14V14Zm6 6v6h24v-6H20Zm0 11v6h24v-6H20Zm0 11v2h24v-2H20Z"/>
-  <path fill="#fff" d="M34 34h17v17H34V34Zm5 7v5h7v-5h-7Z"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" aria-label="Row Level Security" viewBox="0 0 64 64"><rect width="64" height="64" fill="#052e2b" rx="18"/><path fill="#3ecf8e" d="M14 14h36v36H14zm6 6v6h24v-6zm0 11v6h24v-6zm0 11v2h24v-2z"/><path fill="#fff" d="M34 34h17v17H34zm5 7v5h7v-5z"/></svg>

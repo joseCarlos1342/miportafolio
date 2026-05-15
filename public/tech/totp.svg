@@ -1,5 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="TOTP 2FA">
-  <rect width="64" height="64" rx="18" fill="#042F2E"/>
-  <path fill="#14B8A6" d="M32 8 52 17v14c0 12.5-8 21.1-20 25-12-3.9-20-12.5-20-25V17l20-9Z"/>
-  <path fill="#fff" d="M25 29v-4a7 7 0 0 1 14 0v4h2v15H23V29h2Zm5 0h4v-4a2 2 0 0 0-4 0v4Z"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" aria-label="TOTP 2FA" viewBox="0 0 64 64"><rect width="64" height="64" fill="#042f2e" rx="18"/><path fill="#14b8a6" d="m32 8 20 9v14c0 12.5-8 21.1-20 25-12-3.9-20-12.5-20-25V17z"/><path fill="#fff" d="M25 29v-4a7 7 0 0 1 14 0v4h2v15H23V29zm5 0h4v-4a2 2 0 0 0-4 0z"/></svg>
