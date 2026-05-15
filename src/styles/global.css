@@ -65,6 +65,17 @@ svg {
   max-width: 100%;
 }
 
+.js .reveal {
+  opacity: 0;
+  transform: translateY(28px);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 700ms ease, transform 700ms ease;
+}
+
 button:focus-visible,
 a:focus-visible {
   outline: 2px solid var(--primary-focus);
@@ -444,6 +455,15 @@ a:focus-visible {
   color: white;
 }
 
+.text-reveal-line {
+  display: block;
+  overflow: hidden;
+}
+
+.text-reveal-line > span {
+  display: inline-block;
+}
+
 @keyframes pulse-ring {
   from {
     opacity: 0.75;
@@ -508,6 +528,12 @@ a:focus-visible {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+  }
+
+  .js .reveal,
+  .reveal {
+    opacity: 1;
+    transform: none;
   }
 
   .contact-pulse::after {
