@@ -73,7 +73,7 @@ function shouldBypassChallenge(request: Request, url: URL) {
 }
 async function verifyTurnstile(request: Request, env: Env) {
 	const formData = await request.formData();
-	const token = String(formData.get('cf-turnstile-response') ?? '');
+	const token = String(formData.get('turnstile-token') || formData.get('cf-turnstile-response') || '');
 	const redirectTo = sanitizeRedirect(String(formData.get('redirect') ?? '/'));
 
 	if (!token) {
@@ -114,13 +114,22 @@ async function verifyTurnstile(request: Request, env: Env) {
 }
 
 function challengeRedirect(redirectTo: string, reason: string) {
+	const cleanRedirect = withTurnstileReason(redirectTo, reason);
+
 	return new Response(null, {
 		status: 303,
 		headers: {
-			location: `${redirectTo}${redirectTo.includes('?') ? '&' : '?'}turnstile=${reason}`,
+			location: cleanRedirect,
 			'cache-control': 'no-store',
 		},
 	});
+}
+
+function withTurnstileReason(redirectTo: string, reason: string) {
+	const url = new URL(redirectTo, 'https://portfolio.local');
+	url.searchParams.delete('turnstile');
+	url.searchParams.set('turnstile', reason);
+	return `${url.pathname}${url.search}${url.hash}`;
 }
 
 async function hasValidVerificationCookie(request: Request, env: Env) {
@@ -175,7 +184,9 @@ function timingSafeEqual(a: string, b: string) {
 function sanitizeRedirect(value: string) {
 	if (!value.startsWith('/')) return '/';
 	if (value.startsWith('//')) return '/';
-	return value;
+	const url = new URL(value, 'https://portfolio.local');
+	url.searchParams.delete('turnstile');
+	return `${url.pathname}${url.search}${url.hash}`;
 }
 
 function renderChallengePage(siteKey: string, redirectTo: string) {
@@ -253,6 +264,18 @@ function renderChallengePage(siteKey: string, redirectTo: string) {
 				cursor: pointer;
 			}
 
+			button:disabled {
+				cursor: not-allowed;
+				opacity: 0.52;
+			}
+
+			.error {
+				margin: 18px 0 0;
+				color: #b42318;
+				font-size: 14px;
+				line-height: 1.4;
+			}
+
 			@media (max-width: 480px) {
 				main { padding: 32px 20px; }
 			}
@@ -262,14 +285,40 @@ function renderChallengePage(siteKey: string, redirectTo: string) {
 		<main aria-labelledby="security-title">
 			<h1 id="security-title">Un momento.</h1>
 			<p>Verifica que eres una persona para acceder al portafolio de Jose Carlos.</p>
-			<form method="post" action="${VERIFY_PATH}">
+			<form id="turnstile-form" method="post" action="${VERIFY_PATH}">
 				<input type="hidden" name="redirect" value="${safeRedirect}" />
+				<input id="turnstile-token" type="hidden" name="turnstile-token" />
 				<div class="turnstile-wrap">
-					<div class="cf-turnstile" data-sitekey="${safeSiteKey}" data-theme="light"></div>
+					<div class="cf-turnstile" data-sitekey="${safeSiteKey}" data-theme="light" data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired" data-error-callback="onTurnstileExpired"></div>
 				</div>
-				<button type="submit">Continuar</button>
+				<button id="continue-button" type="submit" disabled>Continuar</button>
+				<p id="turnstile-error" class="error" hidden>No se pudo verificar. Recarga la pagina e intenta de nuevo.</p>
 			</form>
 		</main>
+		<script>
+			const form = document.getElementById('turnstile-form');
+			const tokenInput = document.getElementById('turnstile-token');
+			const continueButton = document.getElementById('continue-button');
+			const errorMessage = document.getElementById('turnstile-error');
+
+			window.onTurnstileSuccess = (token) => {
+				tokenInput.value = token;
+				continueButton.disabled = false;
+				errorMessage.hidden = true;
+			};
+
+			window.onTurnstileExpired = () => {
+				tokenInput.value = '';
+				continueButton.disabled = true;
+			};
+
+			form.addEventListener('submit', (event) => {
+				if (!tokenInput.value) {
+					event.preventDefault();
+					errorMessage.hidden = false;
+				}
+			});
+		</script>
 	</body>
 </html>`;
 }
