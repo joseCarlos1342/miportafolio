@@ -1,6 +1,11 @@
 ---
 import "../styles/global.css";
 
+const siteUrl = "https://portafoliojosecarlos.com";
+const siteTitle = "José Carlos Gómez R. | Ingeniero de Software Full-Stack";
+const siteDescription = "Portafolio profesional de José Carlos Gómez R., ingeniero de software Full-Stack especializado en React, Next.js, Python, Flask, PostgreSQL, Supabase, seguridad y sistemas en tiempo real.";
+const socialDescription = "Proyectos Full-Stack con seguridad, tiempo real, datos y experiencias web modernas listas para producción.";
+const socialImage = `${siteUrl}/og-image.png`;
 const email = "gomezjose7042@gmail.com";
 const linkedin = "https://www.linkedin.com/in/josecarlos-gomez-ing";
 const github = "https://github.com/joseCarlos1342";
@@ -20,6 +25,32 @@ const createScreens = (folder: string) => Array.from({ length: 7 }, (_, index) =
 });
 const financeScreens = createScreens("mis-gastos");
 const loanScreens = createScreens("prestamos");
+const structuredData = {
+	"@context": "https://schema.org",
+	"@graph": [
+		{
+			"@type": "Person",
+			"@id": `${siteUrl}/#person`,
+			name: "José Carlos Gómez R.",
+			url: siteUrl,
+			email: `mailto:${email}`,
+			image: `${siteUrl}/profile.png`,
+			jobTitle: "Ingeniero de Software Full-Stack",
+			description: siteDescription,
+			sameAs: [linkedin, github],
+			knowsAbout: ["React", "Next.js", "Astro", "Node.js", "Python", "Flask", "PostgreSQL", "Supabase", "Redis", "Seguridad web", "Sistemas en tiempo real"],
+		},
+		{
+			"@type": "WebSite",
+			"@id": `${siteUrl}/#website`,
+			url: siteUrl,
+			name: "Portafolio de José Carlos Gómez R.",
+			description: siteDescription,
+			inLanguage: "es-CO",
+			publisher: { "@id": `${siteUrl}/#person` },
+		},
+	],
+};
 ---
 
 <html lang="es">
@@ -27,18 +58,38 @@ const loanScreens = createScreens("prestamos");
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<link rel="manifest" href="/site.webmanifest" />
+		<link rel="canonical" href={`${siteUrl}/`} />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="generator" content={Astro.generator} />
-		<meta
-			name="description"
-			content="Portafolio profesional de José Carlos Gómez R., ingeniero de software Full-Stack especializado en React, Next.js, Python, Flask, PostgreSQL, Supabase y sistemas en tiempo real."
-		/>
+		<meta name="description" content={siteDescription} />
+		<meta name="author" content="José Carlos Gómez R." />
+		<meta name="creator" content="José Carlos Gómez R." />
+		<meta name="robots" content="index, follow, max-image-preview:large" />
+		<meta name="keywords" content="José Carlos Gómez, ingeniero de software, desarrollador full-stack, React, Next.js, Astro, Node.js, Python, Flask, PostgreSQL, Supabase, Redis, portafolio desarrollador Colombia" />
+		<meta name="application-name" content="Portafolio José Carlos Gómez R." />
 		<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
 		<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
-		<meta property="og:title" content="José Carlos Gómez R. | Ingeniero de Software" />
-		<meta property="og:description" content="Portfolio Full-Stack con proyectos de seguridad, tiempo real, datos y productos web modernos." />
+		<meta property="og:locale" content="es_CO" />
+		<meta property="og:site_name" content="Portafolio José Carlos Gómez R." />
+		<meta property="og:url" content={`${siteUrl}/`} />
 		<meta property="og:type" content="website" />
-		<title>José Carlos Gómez R. | Ingeniero de Software</title>
+		<meta property="og:title" content={siteTitle} />
+		<meta property="og:description" content={socialDescription} />
+		<meta property="og:image" content={socialImage} />
+		<meta property="og:image:secure_url" content={socialImage} />
+		<meta property="og:image:type" content="image/png" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content="Portafolio de José Carlos Gómez R., ingeniero de software Full-Stack" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={siteTitle} />
+		<meta name="twitter:description" content={socialDescription} />
+		<meta name="twitter:image" content={socialImage} />
+		<meta name="twitter:image:alt" content="Portafolio de José Carlos Gómez R., ingeniero de software Full-Stack" />
+		<title>{siteTitle}</title>
+		<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 		<script is:inline>
 			(() => {
 				document.documentElement.classList.add("js");
