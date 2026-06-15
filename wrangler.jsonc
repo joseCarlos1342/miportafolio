@@ -1,7 +1,11 @@
 {
-  "name": "jose-carlos-portfolio",
+  "name": "miportafolio",
+  "main": "src/worker.ts",
   "compatibility_date": "2026-05-15",
   "assets": {
     "directory": "./dist"
+  },
+  "vars": {
+    "PUBLIC_TURNSTILE_SITE_KEY": "0x4AAAAAADlQ_wwTyJlzEhSN"
   }
 }
