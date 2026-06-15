@@ -3,36 +3,15 @@ interface Env {
 	PUBLIC_TURNSTILE_SITE_KEY: string;
 	TURNSTILE_SECRET_KEY: string;
 	COOKIE_SECRET: string;
+	CONTACT_EMAIL: string;
 }
 
 const COOKIE_NAME = 'portfolio_turnstile_verified';
 const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 30;
 const VERIFY_PATH = '/__turnstile-verify';
+const CONTACT_EMAIL_PATH = '/__contact-email';
+const PROTECTED_CV_PATH = '/docs/cv-jose-carlos-gomez.pdf';
 const TURNSTILE_SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
-const PUBLIC_FILE_EXTENSIONS = new Set([
-	'css',
-	'js',
-	'mjs',
-	'png',
-	'jpg',
-	'jpeg',
-	'webp',
-	'avif',
-	'gif',
-	'svg',
-	'ico',
-	'json',
-	'txt',
-	'xml',
-	'pdf',
-	'woff',
-	'woff2',
-	'ttf',
-	'otf',
-	'mp4',
-	'webm',
-	'mp3',
-]);
 
 export default {
 	async fetch(request: Request, env: Env): Promise<Response> {
@@ -42,35 +21,37 @@ export default {
 			return verifyTurnstile(request, env);
 		}
 
-		if (shouldBypassChallenge(request, url)) {
-			return env.ASSETS.fetch(request);
+		if (isProtectedPath(url.pathname)) {
+			if (await hasValidVerificationCookie(request, env)) {
+				if (url.pathname === CONTACT_EMAIL_PATH) {
+					return new Response(renderEmailPage(env.CONTACT_EMAIL), {
+						headers: {
+							'content-type': 'text/html; charset=utf-8',
+							'cache-control': 'no-store',
+						},
+					});
+				}
+
+				return env.ASSETS.fetch(request);
+			}
+
+			return new Response(renderChallengePage(env.PUBLIC_TURNSTILE_SITE_KEY, url.pathname + url.search), {
+				status: 403,
+				headers: {
+					'content-type': 'text/html; charset=utf-8',
+					'cache-control': 'no-store',
+				},
+			});
 		}
 
-		if (await hasValidVerificationCookie(request, env)) {
-			return env.ASSETS.fetch(request);
-		}
-
-		return new Response(renderChallengePage(env.PUBLIC_TURNSTILE_SITE_KEY, url.pathname + url.search), {
-			status: 403,
-			headers: {
-				'content-type': 'text/html; charset=utf-8',
-				'cache-control': 'no-store',
-			},
-		});
+		return env.ASSETS.fetch(request);
 	},
 };
 
-function shouldBypassChallenge(request: Request, url: URL) {
-	if (url.pathname === VERIFY_PATH) return true;
-	if (url.pathname.startsWith('/_astro/')) return true;
-	if (url.pathname === '/robots.txt' || url.pathname === '/sitemap-index.xml' || url.pathname === '/sitemap.xml') return true;
-
-	const extension = url.pathname.split('.').pop()?.toLowerCase();
-	if (extension && PUBLIC_FILE_EXTENSIONS.has(extension)) return true;
-
-	const accept = request.headers.get('accept') ?? '';
-	return !accept.includes('text/html') && request.method === 'GET';
+function isProtectedPath(pathname: string) {
+	return pathname === CONTACT_EMAIL_PATH || pathname === PROTECTED_CV_PATH;
 }
+
 async function verifyTurnstile(request: Request, env: Env) {
 	const formData = await request.formData();
 	const token = String(formData.get('turnstile-token') || formData.get('cf-turnstile-response') || '');
@@ -316,6 +297,60 @@ function renderChallengePage(siteKey: string, redirectTo: string) {
 				if (!tokenInput.value) {
 					event.preventDefault();
 					errorMessage.hidden = false;
+				}
+			});
+		</script>
+	</body>
+</html>`;
+}
+
+function renderEmailPage(email: string) {
+	const safeEmail = escapeHtml(email);
+	const mailto = `mailto:${safeEmail}`;
+
+	return `<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="robots" content="noindex" />
+		<title>Email de contacto</title>
+		<style>
+			:root { color-scheme: light; --ink: #1d1d1f; --muted: #6e6e73; --canvas: #f5f5f7; --panel: #fff; --primary: #0066cc; --hairline: rgba(0, 0, 0, 0.1); }
+			* { box-sizing: border-box; }
+			body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px; background: var(--canvas); color: var(--ink); font-family: SF Pro Text, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; }
+			main { width: min(100%, 500px); padding: 40px; border: 1px solid var(--hairline); border-radius: 28px; background: var(--panel); text-align: center; }
+			h1 { margin: 0; font-size: clamp(32px, 7vw, 48px); line-height: 1.05; letter-spacing: -0.045em; }
+			p { margin: 18px 0 28px; color: var(--muted); font-size: 17px; line-height: 1.47; }
+			.email { display: block; margin: 0 0 24px; color: var(--ink); font-size: clamp(20px, 5vw, 28px); font-weight: 600; overflow-wrap: anywhere; }
+			.actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+			a, button { min-height: 44px; border: 0; border-radius: 999px; padding: 12px 22px; font: inherit; text-decoration: none; cursor: pointer; }
+			a { background: var(--primary); color: #fff; }
+			button { background: #f5f5f7; color: var(--ink); }
+			.status { min-height: 22px; margin: 18px 0 0; font-size: 14px; }
+		</style>
+	</head>
+	<body>
+		<main>
+			<h1>Email de contacto.</h1>
+			<p>Este dato esta protegido para reducir scraping automatizado.</p>
+			<strong id="email" class="email">${safeEmail}</strong>
+			<div class="actions">
+				<a href="${mailto}">Abrir correo</a>
+				<button id="copy" type="button">Copiar email</button>
+				<a href="/#contact">Volver</a>
+			</div>
+			<p id="status" class="status" role="status" aria-live="polite"></p>
+		</main>
+		<script>
+			const email = document.getElementById('email').textContent;
+			const status = document.getElementById('status');
+			document.getElementById('copy').addEventListener('click', async () => {
+				try {
+					await navigator.clipboard.writeText(email);
+					status.textContent = 'Email copiado al portapapeles.';
+				} catch {
+					status.textContent = email;
 				}
 			});
 		</script>
