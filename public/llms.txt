@@ -1,0 +1,29 @@
+# Jose Carlos Gomez R. Portfolio
+
+> Bilingual (Spanish/English) full-stack developer portfolio built with Astro, deployed on Cloudflare Workers Assets, with Cloudflare Turnstile anti-scraping protection.
+
+## Links
+
+- [README.md](https://github.com/joseCarlos1342/miportafolio/blob/master/README.md): Project overview, setup, and deployment guide (bilingual ES/EN)
+- [DESIGN.md](https://github.com/joseCarlos1342/miportafolio/blob/master/DESIGN.md): Design system in Google design.md format (tokens + rationale)
+- [docs/ARCHITECTURE.md](https://github.com/joseCarlos1342/miportafolio/blob/master/docs/ARCHITECTURE.md): Architecture — Astro SSG + Cloudflare Worker
+- [docs/DEPLOYMENT.md](https://github.com/joseCarlos1342/miportafolio/blob/master/docs/DEPLOYMENT.md): CI/CD with GitHub Actions, secrets, troubleshooting
+- [docs/ENVIRONMENT.md](https://github.com/joseCarlos1342/miportafolio/blob/master/docs/ENVIRONMENT.md): Environment variables table
+- [docs/SECURITY.md](https://github.com/joseCarlos1342/miportafolio/blob/master/docs/SECURITY.md): Security model — Turnstile, HMAC cookies
+- [docs/SEO.md](https://github.com/joseCarlos1342/miportafolio/blob/master/docs/SEO.md): Open Graph, JSON-LD, sitemap
+- [docs/PERFORMANCE.md](https://github.com/joseCarlos1342/miportafolio/blob/master/docs/PERFORMANCE.md): Image/video/font optimization
+- [docs/ACCESSIBILITY.md](https://github.com/joseCarlos1342/miportafolio/blob/master/docs/ACCESSIBILITY.md): WCAG compliance, ARIA, reduced-motion
+- [docs/CONTENT.md](https://github.com/joseCarlos1342/miportafolio/blob/master/docs/CONTENT.md): Content management — projects, i18n, assets
+- [src/worker.ts](https://github.com/joseCarlos1342/miportafolio/blob/master/src/worker.ts): Cloudflare Worker source (Turnstile verification + protected routes)
+- [src/pages/index.astro](https://github.com/joseCarlos1342/miportafolio/blob/master/src/pages/index.astro): Main page source
+- [src/styles/global.css](https://github.com/joseCarlos1342/miportafolio/blob/master/src/styles/global.css): Design tokens and CSS components
+
+## Overview
+
+Jose Carlos Gomez R. is a Full-Stack software engineer specializing in React, Next.js, Python, PostgreSQL, and Supabase. The portfolio is a single-page bilingual site with six sections: hero with a terminal-style code card, about, skills grid, projects with image carousels and gameplay video, education board, and a Turnstile-gated contact panel.
+
+The site is static-first (Astro `output: 'static'`) with a Cloudflare Worker intercepting only three protected routes: `/__contact-email`, `/__download-cv`, and `/docs/cv-jose-carlos-gomez.pdf`. All other content is served publicly.
+
+The design follows an Apple-inspired minimal aesthetic with a single Action Blue (#0066cc) accent, Inter typography with negative letter-spacing, alternating light/dark canvas sections, and GSAP-powered micro-interactions (reveal, magnetic buttons, 3D tilt) — all gated behind `prefers-reduced-motion`.
+
+The full llms.txt content (all documentation concatenated) is available at [/llms-full.txt](https://portafoliojosecarlos.com/llms-full.txt).

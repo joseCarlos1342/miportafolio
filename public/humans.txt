@@ -1,0 +1,19 @@
+/* HUMANS */
+
+/* TEAM */
+Author:       Jose Carlos Gomez R.
+Role:         Full-Stack Software Engineer
+Site:         https://portafoliojosecarlos.com
+GitHub:       https://github.com/joseCarlos1342
+LinkedIn:     https://www.linkedin.com/in/josecarlos-gomez-ing
+
+/* THANKS */
+Astro:        https://astro.build
+Tailwind CSS: https://tailwindcss.com
+GSAP:         https://gsap.com
+Cloudflare:   https://www.cloudflare.com
+
+/* SITE */
+Last update:  2026-06-20
+Language:     Spanish / English
+License:      MIT

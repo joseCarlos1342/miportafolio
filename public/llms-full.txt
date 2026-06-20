@@ -1,0 +1,149 @@
+# Jose Carlos Gomez R. — Portfolio (Full Documentation for AI Models)
+
+> This is the llms-full.txt file. It concatenates the key documentation for AI models to consume in a single pass.
+
+## Project Overview
+
+Jose Carlos Gomez R. is a Full-Stack software engineer specializing in React, Next.js, Python, PostgreSQL, and Supabase. This is his bilingual (Spanish/English) portfolio website.
+
+The site is a single-page static site built with Astro, deployed on Cloudflare Workers Assets, with a Cloudflare Worker that protects three routes (contact email, CV download, CV PDF) using Cloudflare Turnstile anti-bot verification and HMAC-SHA256 signed cookies.
+
+The design follows an Apple-inspired minimal aesthetic: a single Action Blue (#0066cc) accent, Inter typography with negative letter-spacing, alternating light/dark canvas sections, and GSAP-powered micro-interactions (reveal-on-scroll, magnetic buttons, 3D tilt on project cards) — all gated behind prefers-reduced-motion.
+
+## Tech Stack
+
+- Astro 6.3.3 (output: static, MIT license)
+- Tailwind CSS 4.3.0 (via Vite plugin, MIT license)
+- GSAP 3.15.0 (ES module, GSAP Standard License — free for commercial use, no Club plugins)
+- Wrangler 4.100.0 (Cloudflare deploy CLI, MIT license)
+- Cloudflare Turnstile (anti-bot, Cloudflare ToS)
+- Node.js >= 22.12.0
+
+## Architecture
+
+The portfolio is static-first. Astro generates HTML/CSS/JS at build time into dist/. No framework runtime JS is shipped — the only JS is GSAP (ES module) and the page's UI logic script.
+
+A Cloudflare Worker (src/worker.ts) runs before static assets (run_worker_first: true) and intercepts three protected routes:
+- /__contact-email — renders the contact email page after Turnstile verification
+- /__download-cv — serves the CV PDF after verification
+- /docs/cv-jose-carlos-gomez.pdf — the raw PDF, also protected
+
+All other routes (HTML, CSS, JS, images, fonts) are served publicly via env.ASSETS.fetch(request).
+
+Turnstile flow: protected route → no valid cookie → 403 with Turnstile widget → user completes challenge → POST to /__turnstile-verify → Worker validates token against challenges.cloudflare.com → sets HttpOnly/Secure/SameSite=Lax HMAC-signed cookie for 30 days → redirect to original content.
+
+## Environment Variables
+
+| Variable | Type | Source | Description |
+|---|---|---|---|
+| PUBLIC_TURNSTILE_SITE_KEY | Public | wrangler.jsonc vars | Turnstile widget site key |
+| TURNSTILE_SECRET_KEY | Secret | wrangler secret put | Secret key for token validation |
+| COOKIE_SECRET | Secret | wrangler secret put | HMAC-SHA256 key for cookie signing (openssl rand -base64 48) |
+| CONTACT_EMAIL | Secret | wrangler secret put | Contact email (protected) |
+| CLOUDFLARE_API_TOKEN | CI | GitHub Secrets | Cloudflare API token for deployment |
+| CLOUDFLARE_ACCOUNT_ID | CI | GitHub Secrets | Cloudflare Account ID for deployment |
+
+## Deployment
+
+Automatic via GitHub Actions on push to master. The workflow:
+1. Checkout
+2. Setup Node.js 22 with npm cache
+3. npm ci
+4. npm run build
+5. cloudflare/wrangler-action@v3 with apiToken and accountId inputs → wrangler deploy
+
+Common error: "In a non-interactive environment, it's necessary to set a CLOUDFLARE_API_TOKEN" — means the CLOUDFLARE_API_TOKEN GitHub secret is missing or empty. Create it at Cloudflare with the "Edit Cloudflare Workers" template and add it to GitHub repo Secrets.
+
+## Design System (DESIGN.md)
+
+The design system is documented in DESIGN.md using the Google design.md format. It passes lint with 0 errors and 0 warnings (npx @google/design.md lint DESIGN.md).
+
+Key design tokens:
+- Colors: primary #0066cc, primary-on-dark #2997ff, ink #1d1d1f, canvas #ffffff, canvas-parchment #f5f5f7, surface-dark #272729
+- Typography: Inter font stack, hero 107.2px/600/-0.055em, display 60px/600/-0.045em, lead 24px/300/-0.03em, body 16px/400
+- Rounded: pill 9999px (buttons), xl 32px (cards), lg 24px (panels), md 20px (skill cards)
+- Spacing: section 96px, container 1280px, base unit 8px
+- Single shadow: rgba(0,0,0,0.22) 3px 5px 30px 0 — imagery only, never on cards/buttons/text
+
+Design principles:
+- Single Action Blue accent for all interactive elements
+- Alternating light/dark sections — color change IS the divider
+- Weight 300 is rare (leads only), 600 for headlines, 500 for buttons/nav
+- Negative letter-spacing on all display sizes
+- GSAP animations: reveal, magnetic buttons, 3D tilt — all gated behind prefers-reduced-motion
+
+## Accessibility (WCAG 2.1 AA)
+
+- Skip link to #main
+- Focus visible: 2px solid primary-focus, 4px offset
+- Touch targets: min 44px (min-h-11)
+- Native <dialog> with focus trap, Escape to close, backdrop click to close
+- Carousel keyboard nav (ArrowLeft/ArrowRight)
+- ARIA: aria-label on nav, buttons, dialog; role=status + aria-live=polite on email copy status
+- Decorative images: alt="" (empty); informative images: descriptive alt
+- prefers-reduced-motion: disables all animations, shows .reveal immediately
+- Contrast: Action Blue on white 5.97:1 (AA), ink on white 16.6:1 (AAA), body-muted on parchment 4.68:1 (AA)
+
+## SEO
+
+- Meta: title, description, keywords, robots (index,follow,max-image-preview:large), canonical
+- Open Graph: og:type=website, og:locale=es_CO, og:image 1200x630 PNG
+- Twitter Card: summary_large_image
+- JSON-LD: Person (name, jobTitle, sameAs LinkedIn/GitHub, knowsAbout) + WebSite (url, inLanguage es-CO)
+- robots.txt: allow all, sitemap link
+- Worker pages (challenge, email): noindex
+
+## Performance
+
+- Static-first: no framework runtime JS
+- Images: AVIF + WebP + PNG via <picture>, lazy loading (eager on hero + first slide)
+- Video: WebM optimized + MP4 compatible, autoplay muted loop, IntersectionObserver at 0.35
+- Fonts: Inter via system stack fallback (no @font-face, no FOUT/FOIT)
+- CSS: Tailwind 4 auto-purge, design tokens via CSS custom properties
+- Caching: edge-cached static assets, no-store on protected routes
+
+## i18n (ES/EN)
+
+No i18n library. Uses data attributes:
+- data-es / data-en: text content in Spanish/English
+- data-i18n-aria-es / data-i18n-aria-en: aria-label in Spanish/English
+- Toggle: #languageToggle button, setText(lang) updates all elements
+- Persisted in localStorage under "lang"
+- <html lang> updated dynamically
+
+## Project Structure
+
+```
+agreeable-altitude/
+├── .github/workflows/deploy.yml    # CI/CD
+├── public/
+│   ├── tech/                       # Technology SVG icons
+│   ├── education/                  # Institution logos
+│   ├── projects/                   # Project screenshots and videos
+│   ├── docs/cv-jose-carlos-gomez.pdf  # CV (protected)
+│   ├── favicon.svg                 # Favicon source
+│   ├── og-image.png                # Open Graph image
+│   ├── robots.txt                  # Crawler directives
+│   ├── sitemap.xml                 # Sitemap
+│   ├── site.webmanifest            # PWA manifest
+│   ├── llms.txt                    # AI index
+│   └── llms-full.txt               # This file
+├── scripts/
+│   ├── generate-icons.cjs          # PWA icon generator
+│   └── generate-ico.cjs            # favicon.ico generator
+├── src/
+│   ├── pages/index.astro           # Main page (6 sections)
+│   ├── styles/global.css           # Design tokens + CSS components
+│   └── worker.ts                   # Cloudflare Worker (Turnstile + protected routes)
+├── astro.config.mjs                # Astro config
+├── wrangler.jsonc                  # Cloudflare Workers config
+├── DESIGN.md                       # Design system (Google design.md format)
+├── tsconfig.json                   # TypeScript strict
+└── package.json
+```
+
+## License
+
+MIT License — Copyright (c) 2026 Jose Carlos Gomez R.
+
+Third-party technologies (Astro, Tailwind CSS, GSAP, Wrangler, Cloudflare Turnstile) retain their own licenses. Trademarks belong to their respective owners.

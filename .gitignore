@@ -24,7 +24,6 @@ pnpm-debug.log*
 .idea/
 
 # local agent/design workspace files
-DESIGN.md
 skills-lock.json
 .agents/
 .opencode/
