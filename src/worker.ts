@@ -1,4 +1,4 @@
-interface Env {
+export interface Env {
 	ASSETS: Fetcher;
 	PUBLIC_TURNSTILE_SITE_KEY: string;
 	TURNSTILE_SECRET_KEY: string;
@@ -49,7 +49,7 @@ export default {
 	},
 };
 
-function isProtectedPath(pathname: string) {
+export function isProtectedPath(pathname: string) {
 	return pathname === CONTACT_EMAIL_PATH || pathname === DOWNLOAD_CV_PATH || pathname === PROTECTED_CV_PATH;
 }
 
@@ -113,7 +113,7 @@ async function verifyTurnstile(request: Request, env: Env) {
 	});
 }
 
-function challengeRedirect(redirectTo: string, reason: string) {
+export function challengeRedirect(redirectTo: string, reason: string) {
 	const cleanRedirect = withTurnstileReason(redirectTo, reason);
 
 	return new Response(null, {
@@ -125,14 +125,14 @@ function challengeRedirect(redirectTo: string, reason: string) {
 	});
 }
 
-function withTurnstileReason(redirectTo: string, reason: string) {
+export function withTurnstileReason(redirectTo: string, reason: string) {
 	const url = new URL(redirectTo, 'https://portfolio.local');
 	url.searchParams.delete('turnstile');
 	url.searchParams.set('turnstile', reason);
 	return `${url.pathname}${url.search}${url.hash}`;
 }
 
-async function hasValidVerificationCookie(request: Request, env: Env) {
+export async function hasValidVerificationCookie(request: Request, env: Env) {
 	const rawCookie = getCookie(request.headers.get('cookie') ?? '', COOKIE_NAME);
 	if (!rawCookie) return false;
 
@@ -147,20 +147,20 @@ async function hasValidVerificationCookie(request: Request, env: Env) {
 	return timingSafeEqual(signature, expectedSignature);
 }
 
-function getCookie(cookieHeader: string, name: string) {
+export function getCookie(cookieHeader: string, name: string) {
 	const cookies = cookieHeader.split(';').map((cookie) => cookie.trim());
 	const match = cookies.find((cookie) => cookie.startsWith(`${name}=`));
 	return match ? decodeURIComponent(match.slice(name.length + 1)) : null;
 }
 
-async function signValue(value: string, secret: string) {
+export async function signValue(value: string, secret: string) {
 	const encoder = new TextEncoder();
 	const key = await crypto.subtle.importKey('raw', encoder.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
 	const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(value));
 	return base64UrlEncode(signature);
 }
 
-function base64UrlEncode(buffer: ArrayBuffer) {
+export function base64UrlEncode(buffer: ArrayBuffer) {
 	const bytes = new Uint8Array(buffer);
 	let binary = '';
 	for (const byte of bytes) {
@@ -170,7 +170,7 @@ function base64UrlEncode(buffer: ArrayBuffer) {
 	return btoa(binary).replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '');
 }
 
-function timingSafeEqual(a: string, b: string) {
+export function timingSafeEqual(a: string, b: string) {
 	if (a.length !== b.length) return false;
 
 	let mismatch = 0;
@@ -181,7 +181,7 @@ function timingSafeEqual(a: string, b: string) {
 	return mismatch === 0;
 }
 
-function sanitizeRedirect(value: string) {
+export function sanitizeRedirect(value: string) {
 	if (!value.startsWith('/')) return '/';
 	if (value.startsWith('//')) return '/';
 	const url = new URL(value, 'https://portfolio.local');
@@ -189,7 +189,7 @@ function sanitizeRedirect(value: string) {
 	return `${url.pathname}${url.search}${url.hash}`;
 }
 
-function renderChallengePage(siteKey: string, redirectTo: string) {
+export function renderChallengePage(siteKey: string, redirectTo: string) {
 	const safeRedirect = escapeHtml(sanitizeRedirect(redirectTo));
 	const safeSiteKey = escapeHtml(siteKey);
 
@@ -323,7 +323,7 @@ function renderChallengePage(siteKey: string, redirectTo: string) {
 </html>`;
 }
 
-function renderEmailPage(email: string) {
+export function renderEmailPage(email: string) {
 	const safeEmail = escapeHtml(email);
 	const mailto = `mailto:${safeEmail}`;
 
@@ -377,7 +377,7 @@ function renderEmailPage(email: string) {
 </html>`;
 }
 
-function escapeHtml(value: string) {
+export function escapeHtml(value: string) {
 	return value
 		.replaceAll('&', '&amp;')
 		.replaceAll('<', '&lt;')
