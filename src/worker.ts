@@ -10,6 +10,7 @@ const COOKIE_NAME = 'portfolio_turnstile_verified';
 const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 30;
 const VERIFY_PATH = '/__turnstile-verify';
 const CONTACT_EMAIL_PATH = '/__contact-email';
+const DOWNLOAD_CV_PATH = '/__download-cv';
 const PROTECTED_CV_PATH = '/docs/cv-jose-carlos-gomez.pdf';
 const TURNSTILE_SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
@@ -32,7 +33,7 @@ export default {
 					});
 				}
 
-				return env.ASSETS.fetch(request);
+				return serveCv(request, env);
 			}
 
 			return new Response(renderChallengePage(env.PUBLIC_TURNSTILE_SITE_KEY, url.pathname + url.search), {
@@ -49,7 +50,25 @@ export default {
 };
 
 function isProtectedPath(pathname: string) {
-	return pathname === CONTACT_EMAIL_PATH || pathname === PROTECTED_CV_PATH;
+	return pathname === CONTACT_EMAIL_PATH || pathname === DOWNLOAD_CV_PATH || pathname === PROTECTED_CV_PATH;
+}
+
+async function serveCv(request: Request, env: Env) {
+	const url = new URL(request.url);
+	url.pathname = PROTECTED_CV_PATH;
+	url.search = '';
+
+	const response = await env.ASSETS.fetch(new Request(url, request));
+	const headers = new Headers(response.headers);
+	headers.set('content-type', 'application/pdf');
+	headers.set('content-disposition', 'attachment; filename="cv-jose-carlos-gomez.pdf"');
+	headers.set('cache-control', 'private, max-age=0, must-revalidate');
+
+	return new Response(response.body, {
+		status: response.status,
+		statusText: response.statusText,
+		headers,
+	});
 }
 
 async function verifyTurnstile(request: Request, env: Env) {
