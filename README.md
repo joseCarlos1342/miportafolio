@@ -12,9 +12,9 @@ Portafolio web bilingue (Espanol / Ingles) de Jose Carlos Gomez R., ingeniero de
 
 ### Badges
 
-| CI | Despliegue | Licencia |
-|---|---|---|
-| ![CI](https://github.com/joseCarlos1342/miportafolio/actions/workflows/deploy.yml/badge.svg) | Cloudflare Workers | MIT |
+| CI | Despliegue | Cobertura | Licencia |
+|---|---|---|---|
+| ![CI](https://github.com/joseCarlos1342/miportafolio/actions/workflows/deploy.yml/badge.svg) | Cloudflare Workers | 100% en `worker.ts` | MIT |
 
 ### Stack
 
@@ -25,6 +25,8 @@ Portafolio web bilingue (Espanol / Ingles) de Jose Carlos Gomez R., ingeniero de
 | [GSAP](https://gsap.com) | ^3.15.0 | GSAP Standard | Animaciones |
 | [Wrangler](https://developers.cloudflare.com/workers/wrangler/) | ^4.100.0 | MIT | Deploy CLI |
 | [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/) | — | Cloudflare ToS | Anti-bot |
+| [Vitest](https://vitest.dev) | ^4.1.9 | MIT | Tests unit + integracion |
+| [Playwright](https://playwright.dev) | ^1.61.0 | Apache-2.0 | Tests E2E |
 
 **Requisitos:** Node.js >= 22.12.0
 
@@ -56,7 +58,12 @@ agreeable-altitude/
 │   ├── styles/
 │   │   └── global.css             # Design tokens, tema claro/oscuro, componentes CSS
 │   └── worker.ts                  # Cloudflare Worker: Turnstile + rutas protegidas
+├── test/
+│   └── worker/                    # Vitest: unit + integration tests del Worker
+├── e2e/                           # Playwright: E2E de la UI publica
 ├── astro.config.mjs               # Configuracion Astro (output: static, Tailwind Vite)
+├── vitest.config.ts               # Vitest + pool-workers + gate cobertura 100% worker.ts
+├── playwright.config.ts           # Playwright (chromium + firefox + mobile-chrome)
 ├── wrangler.jsonc                 # Configuracion Cloudflare Workers
 ├── DESIGN.md                      # Sistema de diseno (formato Google design.md)
 ├── tsconfig.json                  # TypeScript strict
@@ -124,12 +131,23 @@ El resto del sitio (HTML, CSS, JS, imagenes, fuentes) se sirve publicamente sin 
 4. Si la validacion pasa, se establece una cookie `HttpOnly`, `Secure`, `SameSite=Lax` por 30 dias.
 5. Las visitas posteriores con cookie valida acceden directamente al contenido protegido.
 
+### Testing
+
+```sh
+npm test                    # unit + integracion (Vitest + pool-workers)
+npm run test:coverage       # gate 100% en src/worker.ts
+npm run test:e2e            # E2E (Playwright: chromium + firefox + mobile)
+```
+
+Ver documentacion completa en [`docs/TESTING.md`](docs/TESTING.md).
+
 ### Documentacion
 
 | Documento | Descripcion |
 |---|---|
 | [DESIGN.md](DESIGN.md) | Sistema de diseno (formato Google design.md, validado con `@google/design.md lint`) |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Arquitectura: Astro + Cloudflare Worker |
+| [docs/TESTING.md](docs/TESTING.md) | Estrategia de pruebas: Vitest + Playwright, cobertura 100% en worker.ts |
 | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | CI/CD con GitHub Actions, secrets, troubleshooting |
 | [docs/ENVIRONMENT.md](docs/ENVIRONMENT.md) | Tabla completa de variables de entorno |
 | [docs/SECURITY.md](docs/SECURITY.md) | Modelo de seguridad, Turnstile, cookies HMAC |
@@ -169,6 +187,8 @@ Bilingual (Spanish / English) web portfolio for Jose Carlos Gomez R., a Full-Sta
 | [GSAP](https://gsap.com) | ^3.15.0 | GSAP Standard | Animations |
 | [Wrangler](https://developers.cloudflare.com/workers/wrangler/) | ^4.100.0 | MIT | Deploy CLI |
 | [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/) | — | Cloudflare ToS | Anti-bot |
+| [Vitest](https://vitest.dev) | ^4.1.9 | MIT | Unit + integration tests |
+| [Playwright](https://playwright.dev) | ^1.61.0 | Apache-2.0 | E2E tests |
 
 **Requirements:** Node.js >= 22.12.0
 
@@ -200,7 +220,12 @@ agreeable-altitude/
 │   ├── styles/
 │   │   └── global.css             # Design tokens, light/dark theme, CSS components
 │   └── worker.ts                  # Cloudflare Worker: Turnstile + protected routes
+├── test/
+│   └── worker/                    # Vitest: Worker unit + integration tests
+├── e2e/                           # Playwright: public UI E2E tests
 ├── astro.config.mjs               # Astro config (output: static, Tailwind Vite)
+├── vitest.config.ts               # Vitest + pool-workers + 100% coverage gate on worker.ts
+├── playwright.config.ts           # Playwright (chromium + firefox + mobile-chrome)
 ├── wrangler.jsonc                 # Cloudflare Workers config
 ├── DESIGN.md                      # Design system (Google design.md format)
 ├── tsconfig.json                  # TypeScript strict
@@ -268,12 +293,23 @@ The rest of the site (HTML, CSS, JS, images, fonts) is served publicly without v
 4. If validation passes, a `HttpOnly`, `Secure`, `SameSite=Lax` cookie is set for 30 days.
 5. Subsequent visits with a valid cookie access the protected content directly.
 
+### Testing
+
+```sh
+npm test                    # unit + integration (Vitest + pool-workers)
+npm run test:coverage       # 100% gate on src/worker.ts
+npm run test:e2e            # E2E (Playwright: chromium + firefox + mobile)
+```
+
+See full documentation in [`docs/TESTING.md`](docs/TESTING.md).
+
 ### Documentation
 
 | Document | Description |
 |---|---|
 | [DESIGN.md](DESIGN.md) | Design system (Google design.md format, validated with `@google/design.md lint`) |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Architecture: Astro + Cloudflare Worker |
+| [docs/TESTING.md](docs/TESTING.md) | Testing strategy: Vitest + Playwright, 100% coverage gate on worker.ts |
 | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | CI/CD with GitHub Actions, secrets, troubleshooting |
 | [docs/ENVIRONMENT.md](docs/ENVIRONMENT.md) | Full environment variable table |
 | [docs/SECURITY.md](docs/SECURITY.md) | Security model, Turnstile, HMAC cookies |
