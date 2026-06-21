@@ -1,0 +1,49 @@
+---
+import type { SkillGroup } from "../../types";
+import SectionHeading from "../ui/SectionHeading.astro";
+import TechPill from "../ui/TechPill.astro";
+import { skillGroups } from "../../data/skills";
+import { es, en } from "../../data/i18n/strings";
+
+const subtitle = { es: es["skills.subtitle"], en: en["skills.subtitle"] };
+---
+
+<section
+	id="skills"
+	class="bg-[color:var(--canvas)] px-5 py-24 sm:px-8"
+	aria-labelledby="skills-title"
+>
+	<div class="mx-auto max-w-7xl">
+		<div
+			class="reveal mb-12 flex flex-col justify-between gap-5 sm:flex-row sm:items-end"
+		>
+			<SectionHeading
+				id="skills-title"
+				text={{ es: es["skills.title"], en: en["skills.title"] }}
+			/>
+			<p
+				class="max-w-md text-lg leading-8 text-[color:var(--body-muted)]"
+				data-es={subtitle.es}
+				data-en={subtitle.en}
+			>
+				{subtitle.es}
+			</p>
+		</div>
+		<div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+			{
+				(skillGroups as SkillGroup[]).map((group) => (
+					<div class="reveal rounded-[1.25rem] border border-[color:var(--hairline)] bg-[color:var(--surface-raised)] p-6">
+						<h3 class="text-xl font-semibold" data-es={group.title.es} data-en={group.title.en}>
+							{group.title.es}
+						</h3>
+						<div class="mt-5 grid gap-3">
+							{group.items.map((tech) => (
+								<TechPill tech={tech} />
+							))}
+						</div>
+					</div>
+				))
+			}
+		</div>
+	</div>
+</section>

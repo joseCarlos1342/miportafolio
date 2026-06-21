@@ -1,0 +1,25 @@
+---
+import type { Locale } from "../../types";
+
+interface Props {
+	id: string;
+	text: Record<Locale, string>;
+	level?: 2 | 3;
+}
+
+const { id, text, level = 2 } = Astro.props;
+const sizeClass =
+	level === 2
+		? "text-4xl font-semibold tracking-[-0.045em] sm:text-6xl"
+		: "text-2xl font-semibold tracking-[-0.035em] sm:text-3xl";
+const Tag = `h${level}` as const;
+---
+
+<Tag
+	id={id}
+	class={sizeClass}
+	data-es={text.es}
+	data-en={text.en}
+>
+	{text.es}
+</Tag>

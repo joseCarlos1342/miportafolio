@@ -1,0 +1,125 @@
+---
+import { site } from "../../data/site";
+import { es, en } from "../../data/i18n/strings";
+import Button from "../ui/Button.astro";
+---
+
+<section
+	id="top"
+	class="relative isolate flex min-h-screen items-center overflow-hidden bg-[color:var(--canvas)] px-5 pt-28 sm:px-8"
+>
+	<div
+		class="absolute inset-x-0 top-16 -z-10 h-px bg-[color:var(--hairline)]"
+	>
+	</div>
+	<div
+		class="absolute right-[-16rem] top-24 -z-10 h-[32rem] w-[32rem] rounded-full bg-[color:var(--primary)]/10 blur-3xl"
+	>
+	</div>
+	<div
+		class="mx-auto grid w-full max-w-7xl items-center gap-16 lg:grid-cols-[1.05fr_0.95fr]"
+	>
+		<div class="reveal max-w-4xl">
+			<p
+				class="mb-6 inline-flex rounded-full border border-[color:var(--hairline)] px-4 py-2 text-sm font-medium text-[color:var(--body-muted)]"
+				data-es={es["hero.eyebrow"]}
+				data-en={en["hero.eyebrow"]}
+			>
+				{es["hero.eyebrow"]}
+			</p>
+			<h1
+				class="max-w-5xl text-5xl font-semibold leading-[0.98] tracking-[-0.055em] text-[color:var(--ink)] sm:text-7xl lg:text-[6.7rem]"
+			>
+				José Carlos<br />Gómez R.
+			</h1>
+			<p
+				class="mt-8 max-w-2xl text-xl font-light leading-8 tracking-[-0.03em] text-[color:var(--body-muted)] sm:text-2xl sm:leading-10"
+				data-es={es["hero.tagline"]}
+				data-en={en["hero.tagline"]}
+			>
+				{es["hero.tagline"]}
+			</p>
+			<div class="mt-10 flex flex-col gap-3 sm:flex-row">
+				<Button
+					href="#projects"
+					variant="primary"
+					large
+				>
+					<span data-es={es["hero.cta.projects"]} data-en={en["hero.cta.projects"]}>
+						{es["hero.cta.projects"]}
+					</span>
+				</Button>
+				<Button
+					href={site.social.linkedin}
+					variant="outline"
+					large
+					target="_blank"
+					rel="noreferrer"
+				>
+					<span data-es={es["hero.cta.linkedin"]} data-en={en["hero.cta.linkedin"]}>
+						{es["hero.cta.linkedin"]}
+					</span>
+				</Button>
+				<Button
+					href={site.protected.downloadCvPath}
+					variant="ghost"
+					large
+				>
+					<span data-es={es["hero.cta.cv"]} data-en={en["hero.cta.cv"]}>
+						{es["hero.cta.cv"]}
+					</span>
+				</Button>
+			</div>
+		</div>
+
+		<div class="reveal relative mx-auto w-full max-w-[32rem] lg:ml-auto">
+			<div
+				class="photo-placeholder overflow-hidden rounded-[2rem] border border-[color:var(--hairline)] p-4 shadow-[var(--shadow-product)] sm:p-5"
+			>
+				<div
+					class="overflow-hidden rounded-[1.45rem] border border-[color:var(--hairline)] bg-[color:var(--canvas)]/65 backdrop-blur-xl"
+				>
+					<img
+						class="h-[22rem] w-full object-cover object-[50%_30%]"
+						src="/profile.png"
+						alt="Foto profesional de José Carlos Gómez R."
+					/>
+				</div>
+				<div class="mt-4 rounded-[1.45rem] bg-[color:var(--surface-dark)] p-5 text-white">
+					<div class="mb-5 flex items-center gap-2" aria-hidden="true">
+						<span class="h-3 w-3 rounded-full bg-[#ff5f57]"></span>
+						<span class="h-3 w-3 rounded-full bg-[#ffbd2e]"></span>
+						<span class="h-3 w-3 rounded-full bg-[#28c840]"></span>
+					</div>
+					<p class="text-sm text-white/58">~/portfolio</p>
+					<p
+						class="mt-4 font-mono text-2xl leading-10 tracking-[-0.04em] sm:text-3xl"
+					>
+						<span class="text-[#7dd3fc]" data-es={es["hero.card.build"]}
+							data-en={en["hero.card.build"]}>{es["hero.card.build"]}</span><br />
+						<span class="text-[#86efac]" data-es={es["hero.card.deploy"]}
+							data-en={en["hero.card.deploy"]}>{es["hero.card.deploy"]}</span><br />
+						<span class="text-[#f0abfc]" data-es={es["hero.card.scale"]}
+							data-en={en["hero.card.scale"]}>{es["hero.card.scale"]}</span>
+					</p>
+					<div
+						class="mt-8 grid grid-cols-3 gap-3 text-center text-xs text-white/64"
+					>
+						<div class="rounded-2xl bg-white/8 p-4">
+							<strong class="block text-lg text-white">{es["hero.card.pwa"]}</strong>
+							<span data-es={es["hero.card.pwaDesc"]} data-en={en["hero.card.pwaDesc"]}>{es["hero.card.pwaDesc"]}</span>
+						</div>
+						<div class="rounded-2xl bg-white/8 p-4">
+							<strong class="block text-lg text-white">{es["hero.card.rls"]}</strong>
+							<span data-es={es["hero.card.rlsDesc"]} data-en={en["hero.card.rlsDesc"]}>{es["hero.card.rlsDesc"]}</span>
+						</div>
+						<div class="rounded-2xl bg-white/8 p-4">
+							<strong class="block text-lg text-white">{es["hero.card.rtc"]}</strong>
+							<span data-es={es["hero.card.rtcDesc"]} data-en={en["hero.card.rtcDesc"]}>{es["hero.card.rtcDesc"]}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

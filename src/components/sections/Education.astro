@@ -1,0 +1,107 @@
+---
+import { education, educationStats } from "../../data/education";
+import { es, en } from "../../data/i18n/strings";
+import SectionHeading from "../ui/SectionHeading.astro";
+import Eyebrow from "../ui/Eyebrow.astro";
+---
+
+<section
+	class="relative overflow-hidden bg-[color:var(--canvas-parchment)] px-5 py-24 sm:px-8"
+	aria-labelledby="education-title"
+>
+	<div
+		class="absolute left-[-10rem] top-10 h-72 w-72 rounded-full bg-[color:var(--primary)]/10 blur-3xl"
+	>
+	</div>
+	<div
+		class="reveal relative mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-start"
+	>
+		<div>
+			<Eyebrow
+				text={{ es: es["education.eyebrow"], en: en["education.eyebrow"] }}
+			/>
+			<SectionHeading
+				id="education-title"
+				text={{ es: es["education.title"], en: en["education.title"] }}
+			/>
+			<p
+				class="mt-6 max-w-lg text-lg leading-8 text-[color:var(--body-muted)]"
+				data-es={es["education.subtitle"]}
+				data-en={en["education.subtitle"]}
+			>
+				{es["education.subtitle"]}
+			</p>
+			<div class="mt-8 grid max-w-md grid-cols-3 gap-3">
+				{
+					educationStats.map((stat) => (
+						<div class="education-stat">
+							<strong>{stat.value}</strong>
+							<span data-es={stat.label.es} data-en={stat.label.en}>
+								{stat.label.es}
+							</span>
+						</div>
+					))
+				}
+			</div>
+		</div>
+
+		<div class="education-board">
+			{
+				education
+					.filter((item) => item.kind === "feature")
+					.map((item) => (
+						<article class="education-feature">
+							<div class="education-icon education-icon--logo">
+								<img src={item.logo} alt="" loading="lazy" />
+							</div>
+							<div>
+								{item.eyebrow && (
+									<p
+										class="text-sm font-semibold uppercase tracking-[0.2em] text-[color:var(--primary)]"
+										data-es={item.eyebrow.es}
+										data-en={item.eyebrow.en}
+									>
+										{item.eyebrow.es}
+									</p>
+								)}
+								<h3
+									class="mt-3 text-2xl font-semibold tracking-[-0.035em] sm:text-3xl"
+									data-es={item.title.es}
+									data-en={item.title.en}
+								>
+									{item.title.es}
+								</h3>
+								<p
+									class="mt-4 leading-7 text-[color:var(--body-muted)]"
+									data-es={item.body.es}
+									data-en={item.body.en}
+								>
+									{item.body.es}
+								</p>
+							</div>
+						</article>
+					))
+			}
+
+			<div class="mt-4 grid gap-4 md:grid-cols-3">
+				{
+					education
+						.filter((item) => item.kind === "card")
+						.map((item) => (
+							<article class="education-card">
+								<div class="education-icon education-icon--logo">
+									<img src={item.logo} alt="" loading="lazy" />
+								</div>
+								<h3 data-es={item.title.es} data-en={item.title.en}>
+									{item.title.es}
+								</h3>
+								<p data-es={item.body.es} data-en={item.body.en}>
+									{item.body.es}
+								</p>
+							</article>
+						))
+				}
+			</div>
+		</div>
+	</div>
+</section>

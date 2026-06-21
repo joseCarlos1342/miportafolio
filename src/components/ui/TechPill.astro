@@ -1,0 +1,22 @@
+---
+import type { Tech } from "../../types";
+
+interface Props {
+	tech: Tech;
+}
+
+const { tech } = Astro.props;
+---
+
+<div
+	class="tech-pill flex items-center gap-3 rounded-2xl border border-[color:var(--hairline)] p-3"
+	style={`--tech-color: ${tech.color}`}
+>
+	<img
+		class="tech-logo"
+		src={`/tech/${tech.slug}.svg`}
+		alt=""
+		loading="lazy"
+	/>
+	<span>{tech.name}</span>
+</div>

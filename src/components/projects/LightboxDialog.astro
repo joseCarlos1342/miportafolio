@@ -1,0 +1,52 @@
+---
+import { es, en } from "../../data/i18n/strings";
+---
+
+<dialog
+	id="previewDialog"
+	class="preview-dialog"
+	aria-label={es["lightbox.aria"]}
+	data-i18n-aria-es={es["lightbox.aria"]}
+	data-i18n-aria-en={en["lightbox.aria"]}
+>
+	<div class="preview-dialog__bar">
+		<p id="previewDialogTitle" class="text-sm font-medium text-white/78"></p>
+		<div class="flex items-center gap-2">
+			<button
+				id="previewDialogPrev"
+				type="button"
+				class="preview-control"
+				aria-label={es["projects.carousel.prev"]}
+				data-i18n-aria-es={es["projects.carousel.prev"]}
+				data-i18n-aria-en={en["projects.carousel.prev"]}
+			>
+				‹
+			</button>
+			<p
+				id="previewDialogCount"
+				class="min-w-12 text-center text-xs font-medium tabular-nums text-white/60"
+			>
+			</p>
+			<button
+				id="previewDialogNext"
+				type="button"
+				class="preview-control"
+				aria-label={es["projects.carousel.next"]}
+				data-i18n-aria-es={es["projects.carousel.next"]}
+				data-i18n-aria-en={en["projects.carousel.next"]}
+			>
+				›
+			</button>
+			<button
+				id="previewDialogClose"
+				type="button"
+				class="preview-dialog__close"
+				data-es={es["lightbox.close"]}
+				data-en={en["lightbox.close"]}
+			>
+				{es["lightbox.close"]}
+			</button>
+		</div>
+	</div>
+	<div id="previewDialogMedia" class="preview-dialog__media"></div>
+</dialog>

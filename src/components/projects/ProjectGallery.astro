@@ -1,0 +1,112 @@
+---
+import type { Project } from "../../types";
+import { es, en } from "../../data/i18n/strings";
+
+interface Props {
+	project: Project;
+}
+
+const { project } = Astro.props;
+const label = project.title.es;
+---
+
+{
+	project.media.kind === "images" ? (
+		<div class="project-preview" data-carousel>
+			<div class="preview-panel project-media rounded-[1.5rem] border border-white/10 bg-[#07080d] p-2 shadow-[var(--shadow-product)]">
+				<div class="relative grid aspect-video place-items-center overflow-hidden rounded-[1.15rem] bg-[#050508]">
+					{project.media.screens.map((screen, index) => (
+						<picture
+							class="carousel-slide contents"
+							hidden={index !== 0}
+							data-slide
+							data-avif={screen.avif}
+							data-webp={screen.webp}
+							data-png={screen.png}
+							data-alt={`Captura ${index + 1} de ${label}`}
+						>
+							<source srcset={screen.avif} type="image/avif" />
+							<source srcset={screen.webp} type="image/webp" />
+							<img
+								class="max-h-full w-full object-contain"
+								src={screen.png}
+								alt={`Captura ${index + 1} de ${label}`}
+								loading={index === 0 ? "eager" : "lazy"}
+							/>
+						</picture>
+					))}
+				</div>
+			</div>
+			<div class="mt-4 flex items-center justify-between gap-3 text-white/72">
+				<div class="flex items-center gap-2">
+					<button
+						type="button"
+						class="carousel-prev preview-control"
+						aria-label={es["projects.carousel.prev"]}
+						data-i18n-aria-es={es["projects.carousel.prev"]}
+						data-i18n-aria-en={en["projects.carousel.prev"]}
+					>
+						‹
+					</button>
+					<button
+						type="button"
+						class="carousel-next preview-control"
+						aria-label={es["projects.carousel.next"]}
+						data-i18n-aria-es={es["projects.carousel.next"]}
+						data-i18n-aria-en={en["projects.carousel.next"]}
+					>
+						›
+					</button>
+					<p class="text-xs font-medium tabular-nums">
+						<span data-carousel-current>1</span> /{" "}
+						<span>{project.media.total}</span>
+					</p>
+				</div>
+				<button
+					type="button"
+					class="preview-expand"
+					data-lightbox-type="image"
+					data-lightbox-label={label}
+					data-es={es["projects.viewLarger"]}
+					data-en={en["projects.viewLarger"]}
+				>
+					{es["projects.viewLarger"]}
+				</button>
+			</div>
+		</div>
+	) : (
+		<div class="project-preview">
+			<div class="preview-panel project-media overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#07080d] p-2 shadow-[var(--shadow-product)]">
+				<div class="grid aspect-video place-items-center overflow-hidden rounded-[1.15rem] bg-[#050508]">
+					<video
+						class="project-video max-h-full w-full object-contain"
+						autoplay
+						muted
+						loop
+						playsinline
+						controls
+						preload="auto"
+						aria-label={`Video preview de ${label}`}
+					>
+						<source src={project.media.webm} type="video/webm" />
+						<source src={project.media.mp4} type="video/mp4" />
+					</video>
+				</div>
+			</div>
+			<div class="mt-4 flex justify-end">
+				<button
+					type="button"
+					class="preview-expand"
+					data-lightbox-type="video"
+					data-lightbox-src={project.media.mp4}
+					data-lightbox-webm={project.media.webm}
+					data-lightbox-label={label}
+					data-es={es["projects.viewLarger"]}
+					data-en={en["projects.viewLarger"]}
+				>
+					{es["projects.viewLarger"]}
+				</button>
+			</div>
+		</div>
+	)
+}

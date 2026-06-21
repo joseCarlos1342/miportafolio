@@ -1,0 +1,15 @@
+---
+import { es, en } from "../../data/i18n/strings";
+---
+
+<footer
+	class="border-t border-[color:var(--hairline)] bg-[color:var(--canvas-parchment)] px-5 py-8 text-center text-sm text-[color:var(--body-muted)] sm:px-8"
+>
+	<div
+		class="mx-auto flex max-w-7xl flex-col items-center justify-center gap-3"
+	>
+		<p data-es={es["footer.copyright"]} data-en={en["footer.copyright"]}>
+			{es["footer.copyright"]}
+		</p>
+	</div>
+</footer>

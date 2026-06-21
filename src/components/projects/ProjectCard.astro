@@ -1,0 +1,54 @@
+---
+import type { Project } from "../../types";
+import { es, en } from "../../data/i18n/strings";
+
+interface Props {
+	project: Project;
+}
+
+const { project } = Astro.props;
+const titleId = `${project.id}-title`;
+const label = project.title.es;
+---
+
+<article
+	class="project-card reveal grid overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.045] lg:grid-cols-[1.05fr_0.95fr]"
+	aria-labelledby={titleId}
+>
+	<div class="p-7 sm:p-10">
+		<p
+			class="text-sm font-semibold uppercase tracking-[0.22em] text-[color:var(--primary-on-dark)]"
+		>
+			{project.stack}
+		</p>
+		<h3
+			id={titleId}
+			class="mt-5 text-3xl font-semibold tracking-[-0.04em] sm:text-5xl"
+			data-es={project.title.es}
+			data-en={project.title.en}
+		>
+			{project.title.es}
+		</h3>
+		<p
+			class="mt-6 max-w-xl text-lg leading-8 text-white/68"
+			data-es={project.description.es}
+			data-en={project.description.en}
+		>
+			{project.description.es}
+		</p>
+		<a
+			href={project.link.repo}
+			target="_blank"
+			rel="noreferrer"
+			class="magnetic mt-8 inline-flex min-h-11 items-center justify-center rounded-full border border-white/18 px-5 py-3 text-sm font-medium text-white transition hover:border-[color:var(--primary-on-dark)] hover:text-[color:var(--primary-on-dark)]"
+			data-es={es["projects.viewGithub"]}
+			data-en={en["projects.viewGithub"]}
+		>
+			{es["projects.viewGithub"]}
+		</a>
+	</div>
+	<div class="p-6 sm:p-10">
+		<slot name="media" />
+	</div>
+	<span class="hidden" data-project-id={project.id} aria-label={label}></span>
+</article>

@@ -1,0 +1,54 @@
+---
+import { site } from "../../data/site";
+import { es } from "../../data/i18n/strings";
+
+const personId = `${site.url}/#person`;
+const websiteId = `${site.url}/#website`;
+
+const structuredData = {
+	"@context": "https://schema.org",
+	"@graph": [
+		{
+			"@type": "Person",
+			"@id": personId,
+			name: site.author,
+			url: site.url,
+			image: `${site.url}/profile.png`,
+			jobTitle: "Ingeniero de Software Full-Stack",
+			description: site.description,
+			sameAs: [site.social.linkedin, site.social.github],
+			knowsAbout: [
+				"React",
+				"Next.js",
+				"Astro",
+				"Node.js",
+				"Python",
+				"Flask",
+				"PostgreSQL",
+				"Supabase",
+				"Redis",
+				"Seguridad web",
+				"Sistemas en tiempo real",
+			],
+		},
+		{
+			"@type": "WebSite",
+			"@id": websiteId,
+			url: site.url,
+			name: site.applicationName,
+			description: site.description,
+			inLanguage: "es-CO",
+			publisher: { "@id": personId },
+		},
+	],
+};
+---
+
+<script
+	is:inline
+	type="application/ld+json"
+	set:html={JSON.stringify(structuredData)}
+/>
+<noscript>
+	<p>{es["site.skip"]}</p>
+</noscript>

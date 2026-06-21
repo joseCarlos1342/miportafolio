@@ -1,0 +1,49 @@
+---
+import "../styles/global.css";
+import MetaTags from "../components/seo/MetaTags.astro";
+import StructuredData from "../components/seo/StructuredData.astro";
+import Hreflang from "../components/seo/Hreflang.astro";
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<link rel="manifest" href="/site.webmanifest" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<MetaTags title={title} description={description} />
+		<Hreflang />
+		<StructuredData />
+		<script is:inline>
+			(() => {
+				document.documentElement.classList.add("js");
+				history.scrollRestoration = "manual";
+				if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+				window.scrollTo(0, 0);
+				const storedTheme = localStorage.getItem("theme");
+				const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+				const theme = storedTheme === "dark" || storedTheme === "light" ? storedTheme : prefersDark ? "dark" : "light";
+				document.documentElement.classList.toggle("dark", theme === "dark");
+				document.documentElement.dataset.theme = theme;
+			})();
+		</script>
+	</head>
+	<body class="min-h-screen overflow-x-hidden">
+		<a class="skip-link" href="#main" data-es="Saltar al contenido" data-en="Skip to content">Saltar al contenido</a>
+		<slot />
+		<script>
+			import { initClient } from "../scripts/main";
+			initClient();
+		</script>
+	</body>
+</html>

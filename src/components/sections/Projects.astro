@@ -1,0 +1,40 @@
+---
+import { projects } from "../../data/projects";
+import { es, en } from "../../data/i18n/strings";
+import SectionHeading from "../ui/SectionHeading.astro";
+import Eyebrow from "../ui/Eyebrow.astro";
+import ProjectCard from "../projects/ProjectCard.astro";
+import ProjectGallery from "../projects/ProjectGallery.astro";
+---
+
+<section
+	id="projects"
+	class="bg-[color:var(--surface-dark)] px-5 py-24 text-white sm:px-8"
+	aria-labelledby="projects-title"
+>
+	<div class="mx-auto max-w-7xl">
+		<div class="reveal mb-14 max-w-4xl">
+			<Eyebrow
+				text={{ es: es["projects.eyebrow"], en: en["projects.eyebrow"] }}
+				variant="on-dark"
+			/>
+			<SectionHeading
+				id="projects-title"
+				text={{ es: es["projects.title"], en: en["projects.title"] }}
+			/>
+		</div>
+
+		<div class="space-y-6">
+			{
+				projects.map((project) => (
+					<ProjectCard project={project}>
+						<ProjectGallery
+							slot="media"
+							project={project}
+						/>
+					</ProjectCard>
+				))
+			}
+		</div>
+	</div>
+</section>

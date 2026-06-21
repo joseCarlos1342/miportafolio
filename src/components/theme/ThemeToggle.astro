@@ -1,0 +1,15 @@
+---
+import { es, en } from "../../data/i18n/strings";
+---
+
+<button
+	id="themeToggle"
+	class="magnetic min-h-11 rounded-full border border-[color:var(--hairline)] px-4 text-sm font-medium text-[color:var(--ink)] transition active:scale-95"
+	type="button"
+	aria-label={es["theme.toggle"]}
+	data-i18n-aria-es={es["theme.toggle"]}
+	data-i18n-aria-en={en["theme.toggle"]}
+	aria-pressed="false"
+>
+	<span class="theme-label" data-es={es["theme.label.dark"]} data-en={en["theme.label.dark"]}>{es["theme.label.dark"]}</span>
+</button>
