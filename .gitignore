@@ -27,6 +27,8 @@ pnpm-debug.log*
 skills-lock.json
 .agents/
 .opencode/
+.claude/
+.kombai/
 
 # test artifacts
 coverage/
