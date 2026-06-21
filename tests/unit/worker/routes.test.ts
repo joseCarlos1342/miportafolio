@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { createExecutionContext, waitOnExecutionContext } from "cloudflare:test";
-import worker, { type Env } from "../../src/worker";
+import worker, { type Env } from "../../../src/worker";
 
 const TURNSTILE_SITEVERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
@@ -91,7 +91,7 @@ describe("protected routes without a valid cookie", () => {
 describe("protected routes with a valid cookie", () => {
 	async function makeSignedCookie(env: Env) {
 		const ts = Math.floor(Date.now() / 1000);
-		const { signValue } = await import("../../src/worker");
+		const { signValue } = await import("../../../src/worker");
 		const signature = await signValue(String(ts), env.COOKIE_SECRET);
 		return `portfolio_turnstile_verified=${ts}.${signature}`;
 	}

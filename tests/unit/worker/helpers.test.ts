@@ -12,8 +12,8 @@ import {
 	renderEmailPage,
 	withTurnstileReason,
 	challengeRedirect,
-} from "../../src/worker";
-import type { Env } from "../../src/worker";
+} from "../../../src/worker";
+import type { Env } from "../../../src/worker";
 
 const TEST_ENV: Env = {
 	ASSETS: { fetch: async () => new Response("asset") } as unknown as Env["ASSETS"],
