@@ -8,13 +8,18 @@ export default defineConfig({
 			wrangler: { configPath: "./wrangler.jsonc" },
 		}),
 	],
+	resolve: {
+		alias: {
+			"~/*": "./src/*",
+		},
+	},
 	test: {
-		include: ["test/**/*.test.ts"],
+		include: ["tests/unit/**/*.test.ts"],
 		coverage: {
 			provider: "istanbul",
 			reporter: ["text", "text-summary", "html", "lcov"],
 			reportsDirectory: "coverage",
-			include: ["src/worker.ts"],
+			include: ["src/worker/**/*.ts"],
 			thresholds: {
 				perFile: true,
 				lines: 100,

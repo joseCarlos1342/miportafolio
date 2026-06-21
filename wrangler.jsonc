@@ -1,13 +1,14 @@
 {
-  "name": "miportafolio",
-  "main": "src/worker.ts",
-  "compatibility_date": "2026-05-15",
-  "assets": {
-    "directory": "./dist",
-    "binding": "ASSETS",
-    "run_worker_first": true
-  },
-  "vars": {
-    "PUBLIC_TURNSTILE_SITE_KEY": "0x4AAAAAADlQ_wwTyJlzEhSN"
-  }
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "miportafolio",
+	"main": "src/worker/index.ts",
+	"compatibility_date": "2026-05-15",
+	"assets": {
+		"directory": "./dist",
+		"binding": "ASSETS",
+		"run_worker_first": true
+	},
+	"vars": {
+		"PUBLIC_TURNSTILE_SITE_KEY": "0x4AAAAAADlQ_wwTyJlzEhSN"
+	}
 }
