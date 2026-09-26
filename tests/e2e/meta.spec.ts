@@ -71,7 +71,7 @@ test.describe("Meta and head", () => {
 	test("sets theme-color meta for light and dark", async ({ page }) => {
 		const light = page.locator('meta[name="theme-color"][media*="light"]');
 		const dark = page.locator('meta[name="theme-color"][media*="dark"]');
-		await expect(light).toHaveAttribute("content", "#ffffff");
-		await expect(dark).toHaveAttribute("content", "#000000");
+		await expect(light).toHaveAttribute("content", "#e6e8e1");
+		await expect(dark).toHaveAttribute("content", "#0d1512");
 	});
 });

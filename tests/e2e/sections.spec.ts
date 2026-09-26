@@ -15,7 +15,7 @@ test.describe("Sections and navigation", () => {
 
 	test("renders the about section", async ({ page }) => {
 		await expect(page.locator("#about-title")).toBeVisible();
-		await expect(page.locator("#about-title")).toContainText("Desarrollo con enfoque práctico");
+		await expect(page.locator("#about-title")).toContainText("enfoque práctico");
 	});
 
 	test("renders the skills section with four categories", async ({ page }) => {
@@ -37,8 +37,8 @@ test.describe("Sections and navigation", () => {
 
 	test("renders the education section", async ({ page }) => {
 		await expect(page.locator("#education-title")).toBeVisible();
-		await expect(page.locator("#education-title")).toContainText("Base académica");
-		await expect(page.locator(".education-feature h3").first()).toHaveText("Ingeniería de Software");
+		await expect(page.locator("#education-title")).toContainText("Formación");
+		await expect(page.locator(".cp--primary .cp__title")).toHaveText("Ingeniería de Software");
 	});
 
 	test("renders the contact section with channels", async ({ page }) => {

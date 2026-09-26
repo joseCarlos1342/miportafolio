@@ -16,7 +16,7 @@ test.describe("Language toggle (i18n)", () => {
 		await expect(page.locator("html")).toHaveAttribute("lang", "es");
 		await expect(page.locator("#languageToggle")).toHaveText("EN");
 		await expect(page.locator("#projects-title")).toHaveText(
-			"Proyectos reales con interfaz, lógica de negocio y despliegue."
+			"Tres proyectos reales: interfaz, lógica y despliegue."
 		);
 	});
 
@@ -27,15 +27,15 @@ test.describe("Language toggle (i18n)", () => {
 		await expect(page.locator("html")).toHaveAttribute("lang", "en");
 		await expect(toggle).toHaveText("ES");
 		await expect(page.locator("#projects-title")).toHaveText(
-			"Real projects with interface, business logic and deployment."
+			"Three real projects: interface, logic and deployment."
 		);
-		await expect(page.locator("#contact-title")).toHaveText("Let's talk about your next idea.");
+		await expect(page.locator("#contact-title")).toHaveText("Let's define the next step.");
 
 		await toggle.click();
 		await expect(page.locator("html")).toHaveAttribute("lang", "es");
 		await expect(toggle).toHaveText("EN");
 		await expect(page.locator("#projects-title")).toHaveText(
-			"Proyectos reales con interfaz, lógica de negocio y despliegue."
+			"Tres proyectos reales: interfaz, lógica y despliegue."
 		);
 	});
 
@@ -55,7 +55,7 @@ test.describe("Language toggle (i18n)", () => {
 	});
 
 	test("updates aria-labels on toggle", async ({ page }) => {
-		const nav = page.locator('nav[aria-label]');
+		const nav = page.locator("header nav[aria-label]");
 		await expect(nav).toHaveAttribute("aria-label", "Navegación principal");
 
 		await page.locator("#languageToggle").click();
