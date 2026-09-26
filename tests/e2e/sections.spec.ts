@@ -13,6 +13,11 @@ test.describe("Sections and navigation", () => {
 		await expect(page.locator('#top a[href="/__download-cv"]').first()).toBeVisible();
 	});
 
+	test("does not show an availability status in the hero", async ({ page }) => {
+		await expect(page.locator(".readout__v--live")).toHaveCount(0);
+		await expect(page.locator("#top")).not.toContainText("Disponible");
+	});
+
 	test("renders the about section", async ({ page }) => {
 		await expect(page.locator("#about-title")).toBeVisible();
 		await expect(page.locator("#about-title")).toContainText("enfoque práctico");

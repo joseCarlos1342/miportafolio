@@ -17,8 +17,6 @@ export const es = {
 	"hero.datum.profileValue": "Full-Stack",
 	"hero.datum.base": "Ubicación",
 	"hero.datum.baseValue": "Colombia",
-	"hero.datum.status": "Estado",
-	"hero.datum.statusValue": "Disponible",
 	"hero.scroll": "Explorar",
 
 	"about.designation": "Sobre mí",
@@ -95,8 +93,6 @@ export const en = {
 	"hero.datum.profileValue": "Full-Stack",
 	"hero.datum.base": "Location",
 	"hero.datum.baseValue": "Colombia",
-	"hero.datum.status": "Status",
-	"hero.datum.statusValue": "Available",
 	"hero.scroll": "Explore",
 
 	"about.designation": "About",
