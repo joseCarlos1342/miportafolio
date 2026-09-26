@@ -18,6 +18,11 @@ test.describe("Sections and navigation", () => {
 		await expect(page.locator("#top")).not.toContainText("Disponible");
 	});
 
+	test("keeps cartographic metadata out of the hero copy", async ({ page }) => {
+		await expect(page.locator(".hero__titleblock")).toHaveCount(0);
+		await expect(page.locator("#top .coord")).toHaveCount(0);
+	});
+
 	test("renders the about section", async ({ page }) => {
 		await expect(page.locator("#about-title")).toBeVisible();
 		await expect(page.locator("#about-title")).toContainText("enfoque práctico");
