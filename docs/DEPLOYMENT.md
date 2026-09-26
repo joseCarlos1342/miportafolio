@@ -14,7 +14,7 @@ El despliegue es automatico. Al hacer push a la rama `master`, el workflow `.git
 2. **Setup Node.js 22** con cache de npm.
 3. **`npm ci`** — instalacion limpia desde `package-lock.json`.
 4. **`npm run build`** — build de Astro, output en `dist/`.
-5. **`cloudflare/wrangler-action@v3`** — ejecuta `wrangler deploy` con los secrets de GitHub.
+5. **`cloudflare/wrangler-action@v4`** — ejecuta `wrangler deploy` con Wrangler 4 y los secrets de GitHub.
 
 ### Secrets necesarios en GitHub
 
@@ -85,7 +85,7 @@ Deployment is automatic. On push to the `master` branch, the workflow `.github/w
 2. **Setup Node.js 22** with npm cache.
 3. **`npm ci`** — clean install from `package-lock.json`.
 4. **`npm run build`** — Astro build, output in `dist/`.
-5. **`cloudflare/wrangler-action@v3`** — runs `wrangler deploy` with GitHub secrets.
+5. **`cloudflare/wrangler-action@v4`** — runs `wrangler deploy` with Wrangler 4 and GitHub secrets.
 
 ### Required GitHub secrets
 
