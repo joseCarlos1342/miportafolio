@@ -1,36 +1,12 @@
-type GsapTimeline = {
-	to: (
-		target: ElementSelector,
-		vars: Record<string, unknown>,
-		position?: string | number,
-	) => GsapTimeline;
-	fromTo: (
-		target: ElementSelector,
-		from: Record<string, unknown>,
-		to: Record<string, unknown>,
-		position?: string | number,
-	) => GsapTimeline;
-	set: (target: ElementSelector, vars: Record<string, unknown>) => void;
-};
-
 type GsapStatic = {
-	set: (target: ElementSelector, vars: Record<string, unknown>) => void;
-	timeline: (opts?: Record<string, unknown>) => GsapTimeline;
-	to: (target: ElementSelector, vars: Record<string, unknown>) => void;
-	fromTo: (
-		target: ElementSelector,
-		from: Record<string, unknown>,
-		to: Record<string, unknown>,
-	) => void;
+	set: (target: unknown, vars: Record<string, unknown>) => void;
+	to: (target: unknown, vars: Record<string, unknown>) => void;
+	fromTo: (target: unknown, from: Record<string, unknown>, to: Record<string, unknown>) => void;
 };
-
-type ElementSelector = string | Element | Element[] | NodeList;
-
-type GsapModule = { gsap: GsapStatic };
 
 async function loadGsap(): Promise<GsapStatic | null> {
 	try {
-		const mod = (await import("gsap")) as unknown as GsapModule;
+		const mod = (await import("gsap")) as unknown as { gsap: GsapStatic };
 		return mod.gsap;
 	} catch {
 		return null;
@@ -41,79 +17,65 @@ function prefersReducedMotion(): boolean {
 	return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-function setRevealTargetsToVisible() {
+function revealAll() {
 	document
 		.querySelectorAll<HTMLElement>(".reveal")
 		.forEach((element) => element.classList.add("is-visible"));
 }
 
-function prepareHeadings() {
-	document.querySelectorAll<HTMLElement>("h1, h2").forEach((heading) => {
-		if (heading.dataset.textPrepared === "true") return;
-		const html = heading.innerHTML;
-		heading.dataset.textPrepared = "true";
-		heading.innerHTML = `<span class="text-reveal-line"><span>${html}</span></span>`;
-	});
-}
+const CHILD_SELECTOR = ".cp, .channel, .legend-group, .site, .reading, .about__layer";
 
 export async function initRevealAnimations() {
 	if (prefersReducedMotion()) {
-		setRevealTargetsToVisible();
+		revealAll();
 		return;
 	}
 	const gsap = await loadGsap();
 	if (!gsap) {
-		setRevealTargetsToVisible();
+		revealAll();
 		return;
 	}
-	prepareHeadings();
-	gsap.set(".reveal", { opacity: 0, y: 42 });
-	gsap.set(".text-reveal-line > span", { yPercent: 110, opacity: 0 });
-	gsap
-		.timeline({ defaults: { ease: "power3.out" } })
-		.to("header", { y: 0, opacity: 1, duration: 0.55 })
-		.to(
-			"#top .reveal",
-			{ opacity: 1, y: 0, duration: 0.9, stagger: 0.16 },
-			"-=0.2",
-		)
-		.to(
-			"#top .text-reveal-line > span",
-			{ yPercent: 0, opacity: 1, duration: 0.9, stagger: 0.08 },
-			"-=0.9",
-		)
-		.fromTo(
-			"#top .preview-panel, #top [class*='shadow-[var(--shadow-product)]']",
-			{ rotateX: 6, rotateY: -8, scale: 0.96 },
-			{ rotateX: 0, rotateY: 0, scale: 1, duration: 1.1 },
-			"-=0.85",
-		);
+
+	const reveal = (element: HTMLElement) => {
+		element.classList.add("is-visible");
+		gsap.to(element, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" });
+		const children = element.querySelectorAll(CHILD_SELECTOR);
+		if (children.length) {
+			gsap.fromTo(
+				children,
+				{ opacity: 0, y: 18 },
+				{ opacity: 1, y: 0, duration: 0.6, stagger: 0.08, ease: "power3.out", delay: 0.1 },
+			);
+		}
+	};
+
+	gsap.set(".reveal", { opacity: 0, y: 26 });
+
+	// Hero reveals immediately on load
+	document
+		.querySelectorAll<HTMLElement>("#top .reveal")
+		.forEach((element, index) => {
+			element.classList.add("is-visible");
+			gsap.fromTo(
+				element,
+				{ opacity: 0, y: 26 },
+				{ opacity: 1, y: 0, duration: 0.9, ease: "power3.out", delay: 0.08 * index },
+			);
+		});
 
 	const observer = new IntersectionObserver(
 		(entries) => {
 			entries.forEach((entry) => {
 				if (!entry.isIntersecting) return;
-				const target = entry.target as HTMLElement;
-				target.classList.add("is-visible");
-				gsap.to(target, { opacity: 1, y: 0, duration: 0.85, ease: "power3.out" });
-				gsap.to(target.querySelectorAll(".text-reveal-line > span"), {
-					yPercent: 0,
-					opacity: 1,
-					duration: 0.75,
-					stagger: 0.06,
-					ease: "power3.out",
-				});
-				gsap.fromTo(
-					target.querySelectorAll(
-						".education-card, .education-stat, .contact-action, .project-card",
-					),
-					{ opacity: 0, y: 18 },
-					{ opacity: 1, y: 0, duration: 0.6, stagger: 0.06, ease: "power3.out" },
-				);
-				observer.unobserve(target);
+				reveal(entry.target as HTMLElement);
+				observer.unobserve(entry.target);
 			});
 		},
-		{ threshold: 0.18 },
+		{ threshold: 0.14, rootMargin: "0px 0px -8% 0px" },
 	);
-	document.querySelectorAll<HTMLElement>(".reveal").forEach((element) => observer.observe(element));
+
+	document.querySelectorAll<HTMLElement>(".reveal").forEach((element) => {
+		if (element.closest("#top")) return;
+		observer.observe(element);
+	});
 }

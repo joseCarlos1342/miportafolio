@@ -5,41 +5,114 @@ import LanguageSwitch from "../i18n/LanguageSwitch.astro";
 import ThemeToggle from "../theme/ThemeToggle.astro";
 ---
 
-<header
-	class="fixed inset-x-0 top-0 z-50 border-b border-[color:var(--hairline)] bg-[color:var(--canvas)]/82 backdrop-blur-xl"
->
+<header class="site-header">
 	<nav
-		class="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8"
+		class="site-header__nav atlas"
 		aria-label="Navegación principal"
 		data-i18n-aria-es="Navegación principal"
 		data-i18n-aria-en="Main navigation"
 	>
-		<a
-			href="#top"
-			class="text-sm font-semibold tracking-[-0.02em] text-[color:var(--ink)]"
-		>
-			JCG
+		<a href="#top" class="station" aria-label="José Carlos Gómez R.">
+			<svg class="station__mark" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+				<path d="M7 1 13 12H1L7 1Z" fill="none" stroke="currentColor" stroke-width="1.4" />
+				<circle cx="7" cy="8.4" r="1.1" fill="currentColor" />
+			</svg>
+			<span class="station__id">J·C·G</span>
 		</a>
-		<div
-			class="hidden items-center gap-7 text-sm text-[color:var(--body-muted)] md:flex"
-		>
+
+		<ul class="legend">
 			{
-				navLinks.map((link) => (
-					<a
-						href={link.href}
-						class="transition hover:text-[color:var(--ink)]"
-						data-es={link.label.es}
-						data-en={link.label.en}
-					>
-						{link.label.es}
-					</a>
+				navLinks.map((link, index) => (
+					<li class="legend__item">
+						<a href={link.href} class="legend__link">
+							<span class="legend__idx tnum">{String(index + 1).padStart(2, "0")}</span>
+							<span data-es={link.label.es} data-en={link.label.en}>{link.label.es}</span>
+						</a>
+					</li>
 				))
 			}
-		</div>
-		<div class="flex items-center gap-2">
+		</ul>
+
+		<div class="site-header__controls">
 			<LanguageSwitch />
 			<ThemeToggle />
 		</div>
 	</nav>
 </header>
 <span class="sr-only" data-es={es["nav.projects"]} data-en={en["nav.projects"]}></span>
+
+<style>
+	.site-header {
+		position: fixed;
+		inset-inline: 0;
+		top: 0;
+		z-index: 100;
+		border-bottom: 1px solid var(--hairline);
+		background: color-mix(in srgb, var(--chart) 82%, transparent);
+		backdrop-filter: blur(12px) saturate(120%);
+	}
+
+	.site-header__nav {
+		display: flex;
+		height: var(--header-h);
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.5rem;
+	}
+
+	.station {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.55rem;
+		color: var(--ink);
+	}
+
+	.station__mark {
+		color: var(--survey);
+	}
+
+	.station__id {
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: var(--text-sm);
+		letter-spacing: 0.12em;
+	}
+
+	.legend {
+		display: none;
+		align-items: center;
+		gap: 1.75rem;
+		list-style: none;
+		padding: 0;
+	}
+
+	.legend__link {
+		display: inline-flex;
+		align-items: baseline;
+		gap: 0.45rem;
+		font-size: var(--text-sm);
+		color: var(--ink-muted);
+		transition: color 160ms var(--ease-survey);
+	}
+
+	.legend__link:hover {
+		color: var(--ink);
+	}
+
+	.legend__idx {
+		font-size: var(--text-xs);
+		color: var(--survey);
+	}
+
+	.site-header__controls {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+	}
+
+	@media (min-width: 768px) {
+		.legend {
+			display: flex;
+		}
+	}
+</style>

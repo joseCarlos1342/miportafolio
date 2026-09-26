@@ -8,15 +8,51 @@ interface Props {
 const { tech } = Astro.props;
 ---
 
-<div
-	class="tech-pill flex items-center gap-3 rounded-2xl border border-[color:var(--hairline)] p-3"
-	style={`--tech-color: ${tech.color}`}
->
-	<img
-		class="tech-logo"
-		src={`/tech/${tech.slug}.svg`}
-		alt=""
-		loading="lazy"
-	/>
-	<span>{tech.name}</span>
-</div>
+<li class="tech-pill legend-entry" style={`--tech-color: ${tech.color}`}>
+	<span class="legend-entry__symbol">
+		<img class="tech-logo" src={`/tech/${tech.slug}.svg`} alt="" loading="lazy" width="20" height="20" />
+	</span>
+	<span class="legend-entry__name">{tech.name}</span>
+	<span class="legend-entry__leader" aria-hidden="true"></span>
+</li>
+
+<style>
+	.legend-entry {
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		align-items: center;
+		gap: 0.65rem;
+		padding: 0.5rem 0;
+		list-style: none;
+	}
+
+	.legend-entry__symbol {
+		display: inline-grid;
+		place-items: center;
+		width: 1.9rem;
+		height: 1.9rem;
+		border: 1px solid var(--hairline);
+		border-radius: var(--r-xs);
+		background: var(--chart-raised);
+	}
+
+	.legend-entry__symbol .tech-logo {
+		width: 1.05rem;
+		height: 1.05rem;
+		object-fit: contain;
+	}
+
+	.legend-entry__name {
+		font-size: var(--text-sm);
+		color: var(--ink);
+		font-weight: 500;
+	}
+
+	.legend-entry__leader {
+		height: 1px;
+		min-width: 1.25rem;
+		background-image: linear-gradient(to right, var(--hairline) 55%, transparent 55%);
+		background-size: 5px 1px;
+		align-self: center;
+	}
+</style>

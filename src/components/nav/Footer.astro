@@ -1,15 +1,86 @@
 ---
 import { es, en } from "../../data/i18n/strings";
+import { site } from "../../data/site";
 ---
 
-<footer
-	class="border-t border-[color:var(--hairline)] bg-[color:var(--canvas-parchment)] px-5 py-8 text-center text-sm text-[color:var(--body-muted)] sm:px-8"
->
-	<div
-		class="mx-auto flex max-w-7xl flex-col items-center justify-center gap-3"
-	>
-		<p data-es={es["footer.copyright"]} data-en={en["footer.copyright"]}>
-			{es["footer.copyright"]}
-		</p>
+<footer class="colophon">
+	<div class="atlas colophon__grid">
+		<div class="colophon__block">
+			<p class="colophon__copy" data-es={es["footer.copyright"]} data-en={en["footer.copyright"]}>
+				{es["footer.copyright"]}
+			</p>
+			<p class="colophon__note" data-es={es["footer.note"]} data-en={en["footer.note"]}>
+				{es["footer.note"]}
+			</p>
+		</div>
+
+		<nav
+			class="colophon__links"
+			aria-label="Enlaces"
+			data-i18n-aria-es="Enlaces"
+			data-i18n-aria-en="Links"
+		>
+			<a href={site.social.linkedin} target="_blank" rel="noreferrer" class="colophon__link">LinkedIn</a>
+			<a href={site.social.github} target="_blank" rel="noreferrer" class="colophon__link">GitHub</a>
+			<a href="#top" class="colophon__link" data-es="Volver arriba" data-en="Back to top">Volver arriba</a>
+		</nav>
 	</div>
 </footer>
+
+<style>
+	.colophon {
+		border-top: 1px solid var(--hairline);
+		background: var(--chart-2);
+		padding-block: clamp(2rem, 5vw, 3.25rem);
+	}
+
+	.colophon__grid {
+		display: grid;
+		gap: 1.75rem;
+		align-items: center;
+	}
+
+	.colophon__copy {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: var(--text-lg);
+		color: var(--ink);
+	}
+
+	.colophon__note {
+		margin-top: 0.4rem;
+		max-width: 46ch;
+		font-size: var(--text-sm);
+		color: var(--ink-muted);
+	}
+
+	.colophon__links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1.25rem;
+	}
+
+	.colophon__link {
+		font-family: var(--font-mono);
+		font-size: var(--text-sm);
+		color: var(--ink-muted);
+		border-bottom: 1px solid transparent;
+		transition: color 160ms var(--ease-survey), border-color 160ms var(--ease-survey);
+	}
+
+	.colophon__link:hover {
+		color: var(--survey);
+		border-color: var(--survey);
+	}
+
+	@media (min-width: 780px) {
+		.colophon__grid {
+			grid-template-columns: 1fr auto;
+			gap: 3rem;
+		}
+
+		.colophon__links {
+			justify-content: flex-end;
+		}
+	}
+</style>

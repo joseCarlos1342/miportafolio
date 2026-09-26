@@ -24,15 +24,6 @@ const {
 	ariaLabelEn,
 	icon = false,
 } = Astro.props;
-
-const sizeClass = large ? "px-6 py-3 text-base" : "px-5 py-3 text-sm";
-const variantClass =
-	variant === "primary"
-		? "bg-[color:var(--primary)] text-white"
-		: variant === "outline"
-			? "border border-[color:var(--primary)] text-[color:var(--primary)]"
-			: "border border-[color:var(--hairline)] text-[color:var(--ink)]";
-const cls = `magnetic inline-flex min-h-11 items-center justify-center gap-2 rounded-full transition active:scale-95 ${sizeClass} ${variantClass}`;
 ---
 
 <a
@@ -43,22 +34,23 @@ const cls = `magnetic inline-flex min-h-11 items-center justify-center gap-2 rou
 	aria-label={ariaLabel}
 	data-i18n-aria-es={ariaLabelEs}
 	data-i18n-aria-en={ariaLabelEn}
-	class={cls}
+	class:list={["control", `control--${variant}`, { "control--lg": large }, "magnetic"]}
 >
-	<slot />
+	<span class="control__label"><slot /></span>
 	{
 		icon && (
 			<svg
+				class="control__icon"
 				aria-hidden="true"
-				width="18"
-				height="18"
+				width="16"
+				height="16"
 				viewBox="0 0 24 24"
 				fill="none"
 			>
 				<path
 					d="M7 17 17 7M9 7h8v8"
 					stroke="currentColor"
-					stroke-width="1.8"
+					stroke-width="2"
 					stroke-linecap="round"
 					stroke-linejoin="round"
 				/>
@@ -66,3 +58,73 @@ const cls = `magnetic inline-flex min-h-11 items-center justify-center gap-2 rou
 		)
 	}
 </a>
+
+<style>
+	.control {
+		display: inline-flex;
+		min-height: 2.9rem;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		padding: 0.7rem 1.15rem;
+		border-radius: var(--r-sm);
+		border: 1px solid transparent;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: var(--text-sm);
+		letter-spacing: 0.01em;
+		transition:
+			transform 160ms var(--ease-survey),
+			background 160ms var(--ease-survey),
+			border-color 160ms var(--ease-survey),
+			color 160ms var(--ease-survey);
+	}
+
+	.control--lg {
+		min-height: 3.25rem;
+		padding: 0.9rem 1.5rem;
+		font-size: var(--text-base);
+	}
+
+	.control:active {
+		transform: translateY(1px);
+	}
+
+	/* Primary — the one committing action, in reserved survey magenta */
+	.control--primary {
+		background: var(--survey);
+		color: var(--survey-ink);
+		box-shadow: var(--shadow-lift);
+	}
+
+	.control--primary:hover {
+		background: var(--survey-deep);
+	}
+
+	/* Secondary — a surveyed control with hairline registration */
+	.control--outline {
+		border-color: var(--hairline-strong);
+		color: var(--ink);
+	}
+
+	.control--outline:hover {
+		border-color: var(--survey);
+		color: var(--survey);
+	}
+
+	/* Ghost — quiet mono control */
+	.control--ghost {
+		color: var(--ink-muted);
+		font-family: var(--font-mono);
+		font-weight: 500;
+		letter-spacing: 0;
+	}
+
+	.control--ghost:hover {
+		color: var(--survey);
+	}
+
+	.control__icon {
+		flex: none;
+	}
+</style>

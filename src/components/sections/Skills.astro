@@ -1,49 +1,125 @@
 ---
 import type { SkillGroup } from "../../types";
-import SectionHeading from "../ui/SectionHeading.astro";
+import SheetHeader from "../ui/SheetHeader.astro";
 import TechPill from "../ui/TechPill.astro";
 import { skillGroups } from "../../data/skills";
 import { es, en } from "../../data/i18n/strings";
-
-const subtitle = { es: es["skills.subtitle"], en: en["skills.subtitle"] };
 ---
 
-<section
-	id="skills"
-	class="bg-[color:var(--canvas)] px-5 py-24 sm:px-8"
-	aria-labelledby="skills-title"
->
-	<div class="mx-auto max-w-7xl">
-		<div
-			class="reveal mb-12 flex flex-col justify-between gap-5 sm:flex-row sm:items-end"
-		>
-			<SectionHeading
-				id="skills-title"
-				text={{ es: es["skills.title"], en: en["skills.title"] }}
-			/>
-			<p
-				class="max-w-md text-lg leading-8 text-[color:var(--body-muted)]"
-				data-es={subtitle.es}
-				data-en={subtitle.en}
-			>
-				{subtitle.es}
-			</p>
-		</div>
-		<div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-			{
-				(skillGroups as SkillGroup[]).map((group) => (
-					<div class="reveal rounded-[1.25rem] border border-[color:var(--hairline)] bg-[color:var(--surface-raised)] p-6">
-						<h3 class="text-xl font-semibold" data-es={group.title.es} data-en={group.title.en}>
+<section id="skills" class="skills atlas" aria-labelledby="skills-title">
+	<div class="reveal">
+		<SheetHeader
+			id="skills-title"
+			designation={{ es: es["skills.designation"], en: en["skills.designation"] }}
+			coord="02 / 05"
+			title={{ es: es["skills.title"], en: en["skills.title"] }}
+		/>
+		<p class="skills__subtitle" data-es={es["skills.subtitle"]} data-en={en["skills.subtitle"]}>
+			{es["skills.subtitle"]}
+		</p>
+	</div>
+
+	<div class="skills__legend reveal">
+		{
+			(skillGroups as SkillGroup[]).map((group, index) => (
+				<section class="legend-group" aria-label={group.title.es}>
+					<header class="legend-group__head">
+						<span class="legend-group__idx tnum">{String(index + 1).padStart(2, "0")}</span>
+						<h3 class="legend-group__title" data-es={group.title.es} data-en={group.title.en}>
 							{group.title.es}
 						</h3>
-						<div class="mt-5 grid gap-3">
-							{group.items.map((tech) => (
-								<TechPill tech={tech} />
-							))}
-						</div>
-					</div>
-				))
-			}
-		</div>
+						<span class="legend-group__count tnum">{String(group.items.length).padStart(2, "0")}</span>
+					</header>
+					<ul class="legend-group__list">
+						{group.items.map((tech) => (
+							<TechPill tech={tech} />
+						))}
+					</ul>
+				</section>
+			))
+		}
 	</div>
 </section>
+
+<style>
+	.skills {
+		padding-block: clamp(4rem, 10vw, 8rem);
+	}
+
+	.skills__subtitle {
+		margin-top: 1.25rem;
+		max-width: var(--measure);
+		font-size: var(--text-lg);
+		line-height: 1.6;
+		color: var(--ink-muted);
+	}
+
+	.skills__legend {
+		margin-top: clamp(2.5rem, 6vw, 4rem);
+		display: grid;
+		gap: 0;
+		border: 1px solid var(--hairline);
+		border-radius: var(--r-md);
+		overflow: hidden;
+	}
+
+	.legend-group {
+		padding: 1.5rem clamp(1.1rem, 3vw, 2rem);
+		border-bottom: 1px solid var(--hairline);
+	}
+
+	.legend-group__head {
+		display: flex;
+		align-items: baseline;
+		gap: 0.75rem;
+		padding-bottom: 0.85rem;
+		border-bottom: 1px solid var(--hairline-strong);
+	}
+
+	.legend-group__idx {
+		font-size: var(--text-xs);
+		color: var(--survey);
+	}
+
+	.legend-group__title {
+		flex: 1;
+		font-size: var(--text-xl);
+		font-weight: 800;
+		letter-spacing: -0.01em;
+		color: var(--ink);
+	}
+
+	.legend-group__count {
+		font-size: var(--text-xs);
+		color: var(--ink-faint);
+	}
+
+	.legend-group__list {
+		margin: 0.6rem 0 0;
+		padding: 0;
+	}
+
+	@media (min-width: 720px) {
+		.skills__legend {
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.legend-group:nth-child(odd) {
+			border-right: 1px solid var(--hairline);
+		}
+	}
+
+	@media (min-width: 1100px) {
+		.skills__legend {
+			grid-template-columns: repeat(4, 1fr);
+		}
+
+		.legend-group {
+			border-right: 1px solid var(--hairline);
+		}
+
+		.legend-group:last-child {
+			border-right: 0;
+		}
+	}
+</style>

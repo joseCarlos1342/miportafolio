@@ -1,127 +1,203 @@
 ---
 import { site } from "../../data/site";
 import { es, en } from "../../data/i18n/strings";
-import SectionHeading from "../ui/SectionHeading.astro";
+import SheetHeader from "../ui/SheetHeader.astro";
+
+const channels = [
+	{
+		href: site.social.linkedin,
+		label: "LinkedIn",
+		descKey: "contact.channel.linkedin",
+		external: true,
+		primary: true,
+	},
+	{
+		href: site.social.github,
+		label: "GitHub",
+		descKey: "contact.channel.github",
+		external: true,
+		primary: false,
+	},
+	{
+		href: site.protected.downloadCvPath,
+		labelKey: "hero.cta.cv",
+		descKey: "contact.channel.cv",
+		external: false,
+		primary: false,
+	},
+	{
+		href: site.protected.emailPath,
+		labelKey: "contact.viewEmail",
+		descKey: "contact.channel.email",
+		external: false,
+		primary: false,
+	},
+] as const;
 ---
 
-<section
-	id="contact"
-	class="relative overflow-hidden bg-[color:var(--canvas)] px-5 py-24 sm:px-8"
-	aria-labelledby="contact-title"
->
-	<div
-		class="absolute left-1/2 top-10 h-80 w-80 -translate-x-1/2 rounded-full bg-[color:var(--primary)]/10 blur-3xl"
-	>
-	</div>
-	<div class="reveal contact-shell mx-auto max-w-5xl">
-		<div class="contact-copy">
-			<SectionHeading
+<section id="contact" class="waypoint atlas" aria-labelledby="contact-title">
+	<div class="waypoint__grid reveal">
+		<div class="waypoint__lead">
+			<SheetHeader
 				id="contact-title"
-				text={{ es: es["contact.title"], en: en["contact.title"] }}
+				designation={{ es: es["contact.designation"], en: en["contact.designation"] }}
+				coord="05 / 05"
+				title={{ es: es["contact.title"], en: en["contact.title"] }}
 			/>
-			<p
-				class="mt-6 max-w-2xl text-lg leading-8 text-[color:var(--body-muted)]"
-				data-es={es["contact.subtitle"]}
-				data-en={en["contact.subtitle"]}
-			>
+			<p class="waypoint__subtitle" data-es={es["contact.subtitle"]} data-en={en["contact.subtitle"]}>
 				{es["contact.subtitle"]}
 			</p>
+			<p class="waypoint__helper mono" data-es={es["contact.helper"]} data-en={en["contact.helper"]}>
+				{es["contact.helper"]}
+			</p>
+			<p id="copyStatus" class="waypoint__status" role="status" aria-live="polite"></p>
 		</div>
 
-		<div class="contact-panel">
-			<div>
-				<p
-					class="text-sm uppercase tracking-[0.22em] text-[color:var(--primary)]"
-					data-es={es["contact.eyebrow"]}
-					data-en={en["contact.eyebrow"]}
-				>
-					{es["contact.eyebrow"]}
-				</p>
-				<p
-					class="contact-email"
-					data-es={es["contact.helper"]}
-					data-en={en["contact.helper"]}
-				>
-					{es["contact.helper"]}
-				</p>
-			</div>
-			<div class="contact-actions">
-				<a
-					href={site.social.linkedin}
-					target="_blank"
-					rel="noreferrer"
-					class="contact-action contact-action--primary magnetic"
-				>
-					<span>LinkedIn</span>
-					<svg
-						aria-hidden="true"
-						width="18"
-						height="18"
-						viewBox="0 0 24 24"
-						fill="none"
-					>
-						<path
-							d="M7 17 17 7M9 7h8v8"
-							stroke="currentColor"
-							stroke-width="1.8"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						></path>
-					</svg>
-				</a>
-				<a
-					href={site.social.github}
-					target="_blank"
-					rel="noreferrer"
-					class="contact-action magnetic"
-				>
-					GitHub
-				</a>
-				<a
-					href={site.protected.downloadCvPath}
-					class="contact-action magnetic"
-					data-es={es["hero.cta.cv"]}
-					data-en={en["hero.cta.cv"]}
-				>
-					{es["hero.cta.cv"]}
-				</a>
-				<a
-					href={site.protected.emailPath}
-					class="contact-action magnetic"
-					aria-label={es["contact.viewEmail"]}
-					data-i18n-aria-es={es["contact.viewEmail"]}
-					data-i18n-aria-en={en["contact.viewEmail"]}
-				>
-					<svg
-						aria-hidden="true"
-						width="18"
-						height="18"
-						viewBox="0 0 24 24"
-						fill="none"
-					>
-						<path
-							d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 17.5v-11Z"
-							stroke="currentColor"
-							stroke-width="1.7"></path>
-						<path
-							d="m5 7 7 6 7-6"
-							stroke="currentColor"
-							stroke-width="1.7"
-							stroke-linecap="round"
-							stroke-linejoin="round"></path>
-					</svg>
-					<span data-es={es["contact.viewEmail"]} data-en={en["contact.viewEmail"]}>
-						{es["contact.viewEmail"]}
-					</span>
-				</a>
-			</div>
-			<p
-				id="copyStatus"
-				class="min-h-6 text-sm text-[color:var(--body-muted)]"
-				role="status"
-				aria-live="polite"
-			>
-			</p>
-		</div>
+		<ul class="waypoint__channels">
+			{
+				channels.map((ch, index) => {
+					const label = "label" in ch ? ch.label : es[ch.labelKey];
+					const labelEs = "label" in ch ? ch.label : es[ch.labelKey];
+					const labelEn = "label" in ch ? ch.label : en[ch.labelKey];
+					return (
+						<li>
+							<a
+								href={ch.href}
+								class:list={["channel", "magnetic", { "channel--primary": ch.primary }]}
+								target={ch.external ? "_blank" : undefined}
+								rel={ch.external ? "noreferrer" : undefined}
+							>
+								<span class="channel__idx tnum">{String(index + 1).padStart(2, "0")}</span>
+								<span class="channel__text">
+									<span class="channel__label" data-es={labelEs} data-en={labelEn}>
+										{label}
+									</span>
+									<span class="channel__desc" data-es={es[ch.descKey]} data-en={en[ch.descKey]}>
+										{es[ch.descKey]}
+									</span>
+								</span>
+								<svg class="channel__arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+									<path
+										d="M5 12h14M13 6l6 6-6 6"
+										stroke="currentColor"
+										stroke-width="1.8"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+									/>
+								</svg>
+							</a>
+						</li>
+					);
+				})
+			}
+		</ul>
 	</div>
 </section>
+
+<style>
+	.waypoint {
+		padding-block: clamp(4rem, 10vw, 8rem);
+	}
+
+	.waypoint__grid {
+		display: grid;
+		gap: clamp(2.5rem, 6vw, 4.5rem);
+		align-items: start;
+	}
+
+	.waypoint__subtitle {
+		margin-top: 1.25rem;
+		max-width: 42ch;
+		font-size: var(--text-lg);
+		line-height: 1.6;
+		color: var(--ink-muted);
+	}
+
+	.waypoint__helper {
+		margin-top: 1rem;
+		font-size: var(--text-xs);
+		letter-spacing: 0.02em;
+		color: var(--ink-faint);
+	}
+
+	.waypoint__status {
+		margin-top: 0.75rem;
+		min-height: 1.4rem;
+		font-family: var(--font-mono);
+		font-size: var(--text-sm);
+		color: var(--datum);
+	}
+
+	.waypoint__channels {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		border-top: 1px solid var(--hairline);
+	}
+
+	.channel {
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		align-items: center;
+		gap: 1.25rem;
+		padding: 1.35rem 0.5rem 1.35rem 0;
+		border-bottom: 1px solid var(--hairline);
+		color: var(--ink);
+		transition: padding-left 200ms var(--ease-survey), color 160ms var(--ease-survey);
+	}
+
+	.channel:hover,
+	.channel:focus-visible {
+		color: var(--survey);
+		padding-left: 0.65rem;
+	}
+
+	.channel__idx {
+		font-size: var(--text-xs);
+		color: var(--ink-faint);
+	}
+
+	.channel:hover .channel__idx {
+		color: var(--survey);
+	}
+
+	.channel__text {
+		display: flex;
+		flex-direction: column;
+		gap: 0.2rem;
+	}
+
+	.channel__label {
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: var(--text-xl);
+		letter-spacing: -0.01em;
+	}
+
+	.channel__desc {
+		font-size: var(--text-sm);
+		color: var(--ink-muted);
+	}
+
+	.channel__arrow {
+		flex: none;
+		transform: translateX(-4px);
+		opacity: 0.5;
+		transition: transform 200ms var(--ease-survey), opacity 200ms var(--ease-survey);
+	}
+
+	.channel:hover .channel__arrow {
+		transform: translateX(0);
+		opacity: 1;
+	}
+
+	.channel--primary .channel__label {
+		color: var(--survey);
+	}
+
+	@media (min-width: 900px) {
+		.waypoint__grid {
+			grid-template-columns: 0.9fr 1.1fr;
+		}
+	}
+</style>

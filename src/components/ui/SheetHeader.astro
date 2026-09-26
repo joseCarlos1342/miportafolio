@@ -1,0 +1,54 @@
+---
+import type { Locale } from "../../types";
+
+interface Props {
+	id: string;
+	designation: Record<Locale, string>;
+	coord: string;
+	title: Record<Locale, string>;
+	level?: 2 | 3;
+}
+
+const { id, designation, coord, title, level = 2 } = Astro.props;
+const Tag = `h${level}` as const;
+const titleSize =
+	level === 2
+		? "text-[color:var(--ink)] text-[length:var(--text-3xl)]"
+		: "text-[color:var(--ink)] text-[length:var(--text-2xl)]";
+---
+
+<div class="sheet-header">
+	<div class="sheet-header__margin">
+		<span
+			class="map-label"
+			data-es={designation.es}
+			data-en={designation.en}>{designation.es}</span
+		>
+		<span class="coord" aria-hidden="true">{coord}</span>
+	</div>
+	<hr class="rule sheet-header__rule" />
+	<Tag id={id} class={`sheet-header__title ${titleSize}`} data-es={title.es} data-en={title.en}>
+		{title.es}
+	</Tag>
+</div>
+
+<style>
+	.sheet-header__margin {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.sheet-header__rule {
+		margin: 0.7rem 0 1.4rem;
+	}
+
+	.sheet-header__title {
+		max-width: 20ch;
+		font-weight: 800;
+		letter-spacing: -0.025em;
+		line-height: 1.02;
+	}
+</style>

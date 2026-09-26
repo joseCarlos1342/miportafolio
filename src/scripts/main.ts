@@ -7,6 +7,7 @@ import { initRevealAnimations } from "./animations/reveal";
 import { initMagnetic } from "./animations/magnetic";
 import { initTechPills } from "./animations/tech-pill";
 import { initProjectCardTilt } from "./animations/project-card";
+import { initContourField } from "./animations/contour-field";
 
 async function loadGsap() {
 	try {
@@ -64,5 +65,6 @@ export async function initClient() {
 	initMagnetic();
 	initTechPills();
 	initProjectCardTilt();
+	initContourField();
 	await initRevealAnimations();
 }

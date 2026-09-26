@@ -4,122 +4,385 @@ import { es, en } from "../../data/i18n/strings";
 import Button from "../ui/Button.astro";
 ---
 
-<section
-	id="top"
-	class="relative isolate flex min-h-screen items-center overflow-hidden bg-[color:var(--canvas)] px-5 pt-28 sm:px-8"
->
-	<div
-		class="absolute inset-x-0 top-16 -z-10 h-px bg-[color:var(--hairline)]"
-	>
+<section id="top" class="hero">
+	<!-- Cartographic field: static SVG contours (no-JS / reduced-motion base) + animated canvas enhancement -->
+	<div class="hero__field" aria-hidden="true">
+		<div class="hero__graticule graticule"></div>
+		<svg
+			class="hero__contours"
+			viewBox="0 0 1200 800"
+			preserveAspectRatio="xMidYMid slice"
+			fill="none"
+		>
+			<g class="hero__rings">
+				<ellipse cx="820" cy="360" rx="520" ry="360" class="c-line" />
+				<ellipse cx="820" cy="360" rx="430" ry="296" class="c-line" />
+				<ellipse cx="820" cy="360" rx="345" ry="238" class="c-index" />
+				<ellipse cx="820" cy="360" rx="266" ry="184" class="c-line" />
+				<ellipse cx="820" cy="360" rx="193" ry="134" class="c-line" />
+				<ellipse cx="820" cy="360" rx="126" ry="88" class="c-index" />
+				<ellipse cx="820" cy="360" rx="66" ry="46" class="c-line" />
+			</g>
+		</svg>
+		<canvas id="contourField" class="hero__canvas"></canvas>
+		<div class="hero__vignette"></div>
 	</div>
-	<div
-		class="absolute right-[-16rem] top-24 -z-10 h-[32rem] w-[32rem] rounded-full bg-[color:var(--primary)]/10 blur-3xl"
-	>
-	</div>
-	<div
-		class="mx-auto grid w-full max-w-7xl items-center gap-16 lg:grid-cols-[1.05fr_0.95fr]"
-	>
-		<div class="reveal max-w-4xl">
-			<p
-				class="mb-6 inline-flex rounded-full border border-[color:var(--hairline)] px-4 py-2 text-sm font-medium text-[color:var(--body-muted)]"
-				data-es={es["hero.eyebrow"]}
-				data-en={en["hero.eyebrow"]}
-			>
-				{es["hero.eyebrow"]}
-			</p>
-			<h1
-				class="max-w-5xl text-5xl font-semibold leading-[0.98] tracking-[-0.055em] text-[color:var(--ink)] sm:text-7xl lg:text-[6.7rem]"
-			>
-				José Carlos<br />Gómez R.
+
+	<div class="atlas hero__inner">
+		<div class="hero__block reveal">
+			<div class="hero__titleblock">
+				<span class="map-label" data-es="Portafolio · 2026" data-en="Portfolio · 2026"
+					>Portafolio · 2026</span
+				>
+				<span class="coord" aria-hidden="true">04°35′N · 74°04′W</span>
+			</div>
+
+			<h1 class="hero__name">
+				<span class="hero__name-line">José Carlos</span>
+				<span class="hero__name-line">Gómez R.</span>
 			</h1>
-			<p
-				class="mt-8 max-w-2xl text-xl font-light leading-8 tracking-[-0.03em] text-[color:var(--body-muted)] sm:text-2xl sm:leading-10"
-				data-es={es["hero.tagline"]}
-				data-en={en["hero.tagline"]}
-			>
+
+			<p class="hero__role mono" data-es={es["hero.role"]} data-en={en["hero.role"]}>
+				{es["hero.role"]}
+			</p>
+
+			<p class="hero__tagline" data-es={es["hero.tagline"]} data-en={en["hero.tagline"]}>
 				{es["hero.tagline"]}
 			</p>
-			<div class="mt-10 flex flex-col gap-3 sm:flex-row">
-				<Button
-					href="#projects"
-					variant="primary"
-					large
-				>
-					<span data-es={es["hero.cta.projects"]} data-en={en["hero.cta.projects"]}>
-						{es["hero.cta.projects"]}
-					</span>
+
+			<div class="hero__actions">
+				<Button href="#projects" variant="primary" large>
+					<span data-es={es["hero.cta.projects"]} data-en={en["hero.cta.projects"]}
+						>{es["hero.cta.projects"]}</span
+					>
 				</Button>
-				<Button
-					href={site.social.linkedin}
-					variant="outline"
-					large
-					target="_blank"
-					rel="noreferrer"
-				>
-					<span data-es={es["hero.cta.linkedin"]} data-en={en["hero.cta.linkedin"]}>
-						{es["hero.cta.linkedin"]}
-					</span>
+				<Button href={site.social.linkedin} variant="outline" large target="_blank" rel="noreferrer">
+					<span data-es={es["hero.cta.linkedin"]} data-en={en["hero.cta.linkedin"]}
+						>{es["hero.cta.linkedin"]}</span
+					>
 				</Button>
-				<Button
-					href={site.protected.downloadCvPath}
-					variant="ghost"
-					large
-				>
-					<span data-es={es["hero.cta.cv"]} data-en={en["hero.cta.cv"]}>
-						{es["hero.cta.cv"]}
-					</span>
+				<Button href={site.protected.downloadCvPath} variant="ghost" large>
+					<span data-es={es["hero.cta.cv"]} data-en={en["hero.cta.cv"]}>{es["hero.cta.cv"]}</span>
 				</Button>
 			</div>
 		</div>
 
-		<div class="reveal relative mx-auto w-full max-w-[32rem] lg:ml-auto">
-			<div
-				class="photo-placeholder overflow-hidden rounded-[2rem] border border-[color:var(--hairline)] p-4 shadow-[var(--shadow-product)] sm:p-5"
-			>
-				<div
-					class="overflow-hidden rounded-[1.45rem] border border-[color:var(--hairline)] bg-[color:var(--canvas)]/65 backdrop-blur-xl"
-				>
-					<img
-						class="h-[22rem] w-full object-cover object-[50%_30%]"
-						src="/profile.png"
-						alt="Foto profesional de José Carlos Gómez R."
-					/>
-				</div>
-				<div class="mt-4 rounded-[1.45rem] bg-[color:var(--surface-dark)] p-5 text-white">
-					<div class="mb-5 flex items-center gap-2" aria-hidden="true">
-						<span class="h-3 w-3 rounded-full bg-[#ff5f57]"></span>
-						<span class="h-3 w-3 rounded-full bg-[#ffbd2e]"></span>
-						<span class="h-3 w-3 rounded-full bg-[#28c840]"></span>
+		<aside class="hero__aside reveal">
+			<figure class="hero__plate registered">
+				<img
+					class="hero__photo"
+					src="/profile.png"
+					alt="Foto profesional de José Carlos Gómez R."
+					width="480"
+					height="600"
+				/>
+				<figcaption class="hero__readout">
+					<div class="readout__row">
+						<span class="readout__k" data-es={es["hero.datum.profile"]} data-en={en["hero.datum.profile"]}
+							>{es["hero.datum.profile"]}</span
+						>
+						<span class="readout__v" data-es={es["hero.datum.profileValue"]} data-en={en["hero.datum.profileValue"]}
+							>{es["hero.datum.profileValue"]}</span
+						>
 					</div>
-					<p class="text-sm text-white/58">~/portfolio</p>
-					<p
-						class="mt-4 font-mono text-2xl leading-10 tracking-[-0.04em] sm:text-3xl"
-					>
-						<span class="text-[#7dd3fc]" data-es={es["hero.card.build"]}
-							data-en={en["hero.card.build"]}>{es["hero.card.build"]}</span><br />
-						<span class="text-[#86efac]" data-es={es["hero.card.deploy"]}
-							data-en={en["hero.card.deploy"]}>{es["hero.card.deploy"]}</span><br />
-						<span class="text-[#f0abfc]" data-es={es["hero.card.scale"]}
-							data-en={en["hero.card.scale"]}>{es["hero.card.scale"]}</span>
-					</p>
-					<div
-						class="mt-8 grid grid-cols-3 gap-3 text-center text-xs text-white/64"
-					>
-						<div class="rounded-2xl bg-white/8 p-4">
-							<strong class="block text-lg text-white">{es["hero.card.pwa"]}</strong>
-							<span data-es={es["hero.card.pwaDesc"]} data-en={en["hero.card.pwaDesc"]}>{es["hero.card.pwaDesc"]}</span>
-						</div>
-						<div class="rounded-2xl bg-white/8 p-4">
-							<strong class="block text-lg text-white">{es["hero.card.rls"]}</strong>
-							<span data-es={es["hero.card.rlsDesc"]} data-en={en["hero.card.rlsDesc"]}>{es["hero.card.rlsDesc"]}</span>
-						</div>
-						<div class="rounded-2xl bg-white/8 p-4">
-							<strong class="block text-lg text-white">{es["hero.card.rtc"]}</strong>
-							<span data-es={es["hero.card.rtcDesc"]} data-en={en["hero.card.rtcDesc"]}>{es["hero.card.rtcDesc"]}</span>
-						</div>
+					<div class="readout__row">
+						<span class="readout__k" data-es={es["hero.datum.base"]} data-en={en["hero.datum.base"]}
+							>{es["hero.datum.base"]}</span
+						>
+						<span class="readout__v" data-es={es["hero.datum.baseValue"]} data-en={en["hero.datum.baseValue"]}
+							>{es["hero.datum.baseValue"]}</span
+						>
 					</div>
-				</div>
-			</div>
-		</div>
+					<div class="readout__row">
+						<span class="readout__k" data-es={es["hero.datum.status"]} data-en={en["hero.datum.status"]}
+							>{es["hero.datum.status"]}</span
+						>
+						<span class="readout__v readout__v--live">
+							<span class="readout__dot"></span>
+							<span data-es={es["hero.datum.statusValue"]} data-en={en["hero.datum.statusValue"]}
+								>{es["hero.datum.statusValue"]}</span
+							>
+						</span>
+					</div>
+				</figcaption>
+			</figure>
+		</aside>
 	</div>
+
+	<a class="hero__scroll" href="#about" data-es={es["hero.scroll"]} data-en={en["hero.scroll"]}>
+		<span>{es["hero.scroll"]}</span>
+		<svg width="14" height="22" viewBox="0 0 14 22" fill="none" aria-hidden="true">
+			<path d="M7 1v20M1 15l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+		</svg>
+	</a>
 </section>
+
+<style>
+	.hero {
+		position: relative;
+		isolation: isolate;
+		min-height: 100svh;
+		display: flex;
+		align-items: center;
+		padding-top: calc(var(--header-h) + clamp(1.5rem, 5vh, 3.5rem));
+		padding-bottom: clamp(3rem, 8vh, 5rem);
+		overflow: hidden;
+	}
+
+	.hero__field {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+	}
+
+	.hero__graticule {
+		position: absolute;
+		inset: 0;
+		opacity: 0.6;
+		mask-image: radial-gradient(ellipse 120% 100% at 70% 40%, #000 40%, transparent 100%);
+	}
+
+	.hero__contours {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	.hero__contours .c-line {
+		stroke: var(--contour);
+		stroke-width: 1;
+	}
+
+	.hero__contours .c-index {
+		stroke: var(--contour-index);
+		stroke-width: 1.5;
+	}
+
+	/* Canvas overrides SVG when JS animates it; both share the layer */
+	.hero__canvas {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		opacity: 0;
+		transition: opacity 0.8s var(--ease-survey);
+	}
+
+	.hero__canvas.is-live {
+		opacity: 1;
+	}
+
+	.hero__canvas.is-live ~ .hero__vignette,
+	.hero__vignette {
+		position: absolute;
+		inset: 0;
+		background: radial-gradient(
+			ellipse 90% 80% at 30% 50%,
+			var(--chart) 8%,
+			transparent 60%
+		);
+		pointer-events: none;
+	}
+
+	/* When canvas is live, fade the static SVG so they don't double up */
+	.hero__field:has(.hero__canvas.is-live) .hero__contours {
+		opacity: 0.28;
+		transition: opacity 0.8s var(--ease-survey);
+	}
+
+	.hero__inner {
+		display: grid;
+		gap: clamp(2rem, 5vw, 4rem);
+		align-items: center;
+		width: 100%;
+	}
+
+	.hero__titleblock {
+		display: flex;
+		align-items: baseline;
+		gap: 1rem;
+		flex-wrap: wrap;
+		padding-bottom: 1rem;
+		border-bottom: 1px solid var(--hairline);
+		margin-bottom: 1.5rem;
+	}
+
+	.hero__name {
+		font-family: var(--font-display);
+		font-weight: 800;
+		text-transform: uppercase;
+		font-size: var(--text-display);
+		line-height: 0.9;
+		letter-spacing: -0.03em;
+		color: var(--ink);
+	}
+
+	.hero__name-line {
+		display: block;
+	}
+
+	.hero__name-line:last-child {
+		color: var(--survey);
+	}
+
+	.hero__role {
+		margin-top: 1.25rem;
+		font-size: var(--text-sm);
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--ink-muted);
+	}
+
+	.hero__tagline {
+		margin-top: 1.1rem;
+		max-width: 46ch;
+		font-size: var(--text-lg);
+		line-height: 1.55;
+		color: var(--ink-muted);
+	}
+
+	.hero__actions {
+		margin-top: 2rem;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+	}
+
+	.hero__aside {
+		justify-self: center;
+	}
+
+	.hero__plate {
+		width: min(22rem, 78vw);
+		background: var(--chart-2);
+		padding: 0.5rem;
+	}
+
+	.hero__photo {
+		width: 100%;
+		height: auto;
+		aspect-ratio: 4 / 5;
+		object-fit: cover;
+		object-position: 50% 28%;
+		border-radius: var(--r-xs);
+		/* Duotone survey treatment — reads as a mapped plate, not a stock headshot */
+		filter: grayscale(1) contrast(1.05) brightness(1.02) sepia(0.12) hue-rotate(80deg) saturate(0.7);
+		mix-blend-mode: multiply;
+	}
+
+	:global(.dark) .hero__photo {
+		mix-blend-mode: screen;
+		filter: grayscale(1) contrast(1.1) brightness(0.95) sepia(0.2) hue-rotate(90deg) saturate(0.6);
+	}
+
+	.hero__readout {
+		margin-top: 0.5rem;
+		padding: 0.75rem 0.6rem 0.4rem;
+		display: grid;
+		gap: 0.4rem;
+	}
+
+	.readout__row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		font-family: var(--font-mono);
+		font-size: var(--text-xs);
+		padding-bottom: 0.4rem;
+		border-bottom: 1px dotted var(--hairline);
+	}
+
+	.readout__row:last-child {
+		border-bottom: 0;
+		padding-bottom: 0;
+	}
+
+	.readout__k {
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: var(--ink-faint);
+	}
+
+	.readout__v {
+		color: var(--ink);
+		font-weight: 500;
+	}
+
+	.readout__v--live {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		color: var(--datum);
+	}
+
+	.readout__dot {
+		width: 0.5rem;
+		height: 0.5rem;
+		border-radius: 999px;
+		background: var(--datum);
+		box-shadow: 0 0 0 0 color-mix(in srgb, var(--datum) 60%, transparent);
+		animation: datum-pulse 2s var(--ease-survey) infinite;
+	}
+
+	@keyframes datum-pulse {
+		0% {
+			box-shadow: 0 0 0 0 color-mix(in srgb, var(--datum) 55%, transparent);
+		}
+		70% {
+			box-shadow: 0 0 0 7px transparent;
+		}
+		100% {
+			box-shadow: 0 0 0 0 transparent;
+		}
+	}
+
+	.hero__scroll {
+		position: absolute;
+		bottom: 1.25rem;
+		left: 50%;
+		transform: translateX(-50%);
+		display: inline-flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.4rem;
+		font-family: var(--font-mono);
+		font-size: var(--text-xs);
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--ink-faint);
+		transition: color 160ms var(--ease-survey);
+	}
+
+	.hero__scroll:hover {
+		color: var(--survey);
+	}
+
+	.hero__scroll svg {
+		animation: scroll-nudge 2.4s var(--ease-survey) infinite;
+	}
+
+	@keyframes scroll-nudge {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(4px);
+		}
+	}
+
+	@media (min-width: 900px) {
+		.hero__inner {
+			grid-template-columns: 1.35fr 0.65fr;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.readout__dot,
+		.hero__scroll svg {
+			animation: none;
+		}
+	}
+</style>
